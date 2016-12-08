@@ -1,0 +1,63 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>test-base</artifactId>
+    <packaging>jar</packaging>
+    <version>${test.base.verion}</version>
+
+
+    <parent>
+        <groupId>com.hzq</groupId>
+        <artifactId>destination</artifactId>
+        <version>${destination.version}</version>
+    </parent>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-all</artifactId>
+        </dependency>
+    </dependencies>
+
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <build.type></build.type>
+                <runtime.env>src/main/resources</runtime.env>
+                <final.name>${project.artifactId}</final.name>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>test</id>
+            <properties>
+                <build.type>test</build.type>
+                <runtime.env>src/main/resources_test</runtime.env>
+                <final.name>${project.artifactId}</final.name>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>prod</id>
+            <properties>
+                <build.type>prod</build.type>
+                <runtime.env>src/main/resources_prod</runtime.env>
+                <final.name>${project.artifactId}</final.name>
+            </properties>
+        </profile>
+    </profiles>
+
+
+    <build>
+        <finalName>${project.artifactId}-${build.type}${project.version}</finalName>
+    </build>
+
+
+</project>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+       http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:property-placeholder location="classpath:*.properties"/>
+
+    <dubbo:registry address="${dubbo.registry.address}" check="false" register="false"/>
+
+    <!-- 本地调试: 通过 url 指定本地地址, 通过 timeout 指定超时时间(默认1秒,一旦超时就会发送失败) -->
+    <dubbo:reference id="messageService" interface="com.hzq.message.service.MessageService"
+                     version="1.0.0" url="dubbo://localhost:${dubbo.protocol.port}"
+                     timeout="${dubbo.service.timeout}"/>
+
+</beans>
