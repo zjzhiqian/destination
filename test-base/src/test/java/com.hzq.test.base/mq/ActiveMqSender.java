@@ -64,6 +64,7 @@ public class ActiveMqSender {
         for (int i = 0; i < 10; i++) {
             //创建一条文本消息
             TextMessage message = session.createTextMessage("ActiveMQ 发送消息" + i);
+            System.out.println(1);
             //通过消息生产者发出消息
             messageProducer.send(message);
         }

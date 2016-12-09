@@ -11,7 +11,7 @@
 
     <properties>
         <destination.version>1.0.0-SNAPSHOT</destination.version>
-
+        <common.config.version>1.0.0-SNAPSHOT</common.config.version>
         <common.base.version>1.0.0-SNAPSHOT</common.base.version>
         <common.message.version>1.0.0-SNAPSHOT</common.message.version>
         <common.message.api.version>1.0.0-SNAPSHOT</common.message.api.version>
@@ -22,7 +22,7 @@
         <test.springboot.app.version>1.0.0-SNAPSHOT</test.springboot.app.version>
 
 
-        <dubbo_version>2.5.4</dubbo_version>
+        <dubbo_version>2.5.3</dubbo_version>
         <commons-io.version>2.4</commons-io.version>
         <spring.version>4.1.2.RELEASE</spring.version>
         <javassist_version>3.19.0-GA</javassist_version>
@@ -80,12 +80,14 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 
-        <activemq.version>5.11.1</activemq.version>
+        <activemq.version>5.11.4</activemq.version>
+        <activemq.hawtbuf.version>1.11</activemq.hawtbuf.version>
     </properties>
 
 
     <modules>
         <module>common-base</module>
+        <module>common-config</module>
         <module>common-message</module>
         <module>common-message-api</module>
 
@@ -125,6 +127,12 @@
                 <version>1.0.13</version>
             </dependency>
 
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-jms</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-core</artifactId>
@@ -201,6 +209,43 @@
                 <artifactId>mina-core</artifactId>
                 <version>${mina_version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>activemq-broker</artifactId>
+                <version>${activemq.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>activemq-client</artifactId>
+                <version>${activemq.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>activemq-kahadb-store</artifactId>
+                <version>${activemq.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>activemq-spring</artifactId>
+                <version>${activemq.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.fusesource.hawtbuf</groupId>
+                <artifactId>hawtbuf</artifactId>
+                <version>${activemq.hawtbuf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-jms</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>activemq-pool</artifactId>
+                <version>${activemq.version}</version>
+            </dependency>
+
+
             <dependency>
                 <groupId>org.glassfish.grizzly</groupId>
                 <artifactId>grizzly-core</artifactId>
@@ -445,39 +490,6 @@
                 <artifactId>cglib-nodep</artifactId>
                 <version>${cglib_version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.zhaimi</groupId>
-                <artifactId>zm-jedis</artifactId>
-                <version>${zm-jedis-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>slf4j-log4j12</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>com.zhaimi</groupId>
-                <artifactId>zm-message</artifactId>
-                <version>${zm-message-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>slf4j-log4j12</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>com.qianye.zhaimi</groupId>
-                <artifactId>util</artifactId>
-                <version>${zhaimi-util.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>slf4j-log4j12</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
 
             <dependency>
                 <groupId>org.apache.activemq</groupId>
@@ -492,7 +504,7 @@
         <repository>
             <id>nexus</id>
             <name>nexus</name>
-            <url>http://192.168.145.150:8081/nexus/content/groups/public</url>
+            <url>http://192.168.29.104:8081/nexus/content/groups/public</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -505,7 +517,7 @@
         <pluginRepository>
             <id>nexus</id>
             <name>nexus</name>
-            <url>http://192.168.145.150:8081/nexus/content/groups/public</url>
+            <url>http://192.168.29.104:8081/nexus/content/groups/public</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -518,11 +530,11 @@
     <distributionManagement>
         <snapshotRepository>
             <id>snapshots</id>
-            <url>http://admin:admin123@192.168.145.150:8081/nexus/content/repositories/snapshots</url>
+            <url>http://admin:admin123@192.168.29.104:8081/nexus/content/repositories/snapshots</url>
         </snapshotRepository>
         <repository>
             <id>releases</id>
-            <url>http://admin:admin123@192.168.145.150:8081/nexus/content/repositories/releases</url>
+            <url>http://admin:admin123@192.168.29.104:8081/nexus/content/repositories/releases</url>
         </repository>
     </distributionManagement>
 

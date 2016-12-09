@@ -16,7 +16,7 @@ public class Message implements Serializable {
 
     private String consumerQueue;
 
-    private Short messageSendTimes;
+    private Integer messageSendTimes;
 
     private Integer isDead;
 
@@ -84,11 +84,11 @@ public class Message implements Serializable {
         this.consumerQueue = consumerQueue;
     }
 
-    public Short getMessageSendTimes() {
+    public Integer getMessageSendTimes() {
         return messageSendTimes;
     }
 
-    public void setMessageSendTimes(Short messageSendTimes) {
+    public void setMessageSendTimes(Integer messageSendTimes) {
         this.messageSendTimes = messageSendTimes;
     }
 

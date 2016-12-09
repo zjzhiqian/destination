@@ -9,6 +9,20 @@
 
     <context:component-scan base-package="com.hzq.message.service"/>
 
-    <dubbo:service interface="com.hzq.message.service.MessageService" ref="messageService" version="1.0.0" />
+    <dubbo:service interface="com.hzq.message.service.MessageService" ref="messageService" version="1.0.0"/>
+
+
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:db-message.properties</value>
+                <value>classpath:activemq.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <import resource="classpath:application-db.xml"/>
+    <import resource="classpath:application-mq.xml"/>
 
 </beans>

@@ -18,13 +18,46 @@
             <artifactId>common-message-api</artifactId>
             <version>${common.message.api.version}</version>
         </dependency>
-
         <dependency>
             <groupId>com.hzq</groupId>
             <artifactId>common-base</artifactId>
             <version>${common.base.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.hzq</groupId>
+            <artifactId>common-config</artifactId>
+            <version>${common.config.version}</version>
+        </dependency>
 
+        <!--mq support-->
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-broker</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-kahadb-store</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-spring</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.fusesource.hawtbuf</groupId>
+            <artifactId>hawtbuf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jms</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-pool</artifactId>
+        </dependency>
 
         <!--dao support-->
         <dependency>
@@ -151,6 +184,48 @@
 
     <build>
         <finalName>${project.artifactId}-${build.type}${project.version}</finalName>
+        <plugins>
+
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>com.hzq</groupId>
+                                    <artifactId>common.message</artifactId>
+                                    <version>${project.parent.version}</version>
+                                    <outputDirectory>${project.build.directory}/destination</outputDirectory>
+                                    <includes>META-INF/assembly/**</includes>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptor>src/main/assembly/assembly.xml</descriptor>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 
 

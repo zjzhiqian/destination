@@ -7,8 +7,7 @@ package com.hzq.message.enums;
 public enum MessageStatus {
 
     PRE_CONFIRM("待确认", 0),
-    CONFIRM("已确认", 1),
-    CONSUMED("已消费", 2);
+    TO_SEND("待发送", 1);
 
 
     private String context;

@@ -1,7 +1,7 @@
 package com.hzq.message.service;
 
 import com.hzq.message.entity.Message;
-import com.hzq.message.exception.MessageBizException;
+import com.hzq.message.exception.MessageException;
 
 /**
  * 消息服务API
@@ -12,59 +12,52 @@ public interface MessageService {
     /**
      * 预存储消息.
      */
-    public int preSaveMessage(Message message) throws MessageBizException;
+    int preSaveMessage(Message message) throws MessageException;
 
 
     /**
      * 确认并发送消息.
      */
-    public int confirmMessage(String messageId) throws MessageBizException;
+    int confirmMessage(String messageId) throws MessageException;
 
 
     /**
-     * 存储并发送消息.
+     * 存储并发送消息到mq.
      */
-    public int saveAndSendMessage(Message message) throws MessageBizException;
+    int saveAndSendMessage(Message message) throws MessageException;
 
 
     /**
-     * 直接发送消息.
+     * 直接发送消息到mq.
      */
-    public int directSendMessage(Message message) throws MessageBizException;
-
+    void directSendMessage(Message message) throws MessageException;
 
     /**
-     * 重发消息.
+     * 根据messageId重发某条消息.(未死亡的消息)
      */
-    public int reSendMessage(Message message) throws MessageBizException;
-
-
-    /**
-     * 根据messageId重发某条消息.
-     */
-    public int reSendMessageByMessageId(String messageId) throws MessageBizException;
+    int reSendMessageByMessageId(String messageId) throws MessageException;
 
 
     /**
      * 将消息标记为死亡消息.
      */
-    public int setMessageToAreadlyDead(String messageId) throws MessageBizException;
+    int setMessageDead(String messageId) throws MessageException;
 
 
     /**
      * 根据消息ID获取消息
      */
-    public Message getMessageByMessageId(String messageId) throws MessageBizException;
+    Message getMessageByMessageId(String messageId) throws MessageException;
 
     /**
      * 根据消息ID删除消息
      */
-    public int deleteMessageByMessageId(String messageId) throws MessageBizException;
+    int deleteMessageByMessageId(String messageId) throws MessageException;
 
 
     /**
      * 重发某个消息队列中的全部已死亡的消息.
      */
-    public void reSendAllDeadMessageByQueueName(String queueName, int batchSize) throws MessageBizException;
+    void resendDeadMessageByQueue(String queueName) throws MessageException;
 
 }

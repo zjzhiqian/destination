@@ -8,12 +8,10 @@
 
     <context:component-scan base-package="com.hzq.**.dao"/>
 
-    <context:property-placeholder location="classpath:mysql.properties" ignore-unresolvable="true"/>
-
     <bean id="master" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
-        <property name="url" value="${db.url}"/>
-        <property name="username" value="${db.username}"/>
-        <property name="password" value="${db.password}"/>
+        <property name="url" value="${db.message.url}"/>
+        <property name="username" value="${db.message.username}"/>
+        <property name="password" value="${db.message.password}"/>
         <property name="initialSize" value="${db.initialPoolSize}"/>
         <property name="minIdle" value="${db.minPoolSize}"/>
         <property name="maxActive" value="${db.maxPoolSize}"/>
@@ -32,7 +30,7 @@
 
     <bean id="simpleSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="master"/>
-        <property name="mapperLocations" value="classpath*:**/mapper/*Mapper.xml"/>
+        <property name="mapperLocations" value="classpath*:com/hzq/**/*Mapper.xml"/>
         <property name="configLocation" value="classpath:mybatis-config.xml"/>
     </bean>
 
