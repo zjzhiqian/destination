@@ -13,6 +13,7 @@
         <destination.version>1.0.0-SNAPSHOT</destination.version>
         <common.config.version>1.0.0-SNAPSHOT</common.config.version>
         <common.base.version>1.0.0-SNAPSHOT</common.base.version>
+        <common.dubbo.admin>1.0.0-SNAPCHOT</common.dubbo.admin>
         <common.message.version>1.0.0-SNAPSHOT</common.message.version>
         <common.message.api.version>1.0.0-SNAPSHOT</common.message.api.version>
 
@@ -22,7 +23,8 @@
         <test.springboot.app.version>1.0.0-SNAPSHOT</test.springboot.app.version>
 
 
-        <dubbo_version>2.5.3</dubbo_version>
+
+        <dubbo.version>2.5.4</dubbo.version>
         <commons-io.version>2.4</commons-io.version>
         <spring.version>4.1.2.RELEASE</spring.version>
         <javassist_version>3.19.0-GA</javassist_version>
@@ -87,6 +89,7 @@
 
     <modules>
         <module>common-base</module>
+        <module>common-dubbo-admin</module>
         <module>common-config</module>
         <module>common-message</module>
         <module>common-message-api</module>
@@ -259,7 +262,7 @@
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>dubbo</artifactId>
-                <version>${dubbo_version}</version>
+                <version>${dubbo.version}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>commons-pool</groupId>
@@ -398,6 +401,11 @@
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
+                <version>${slf4j_version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
                 <version>${slf4j_version}</version>
             </dependency>
             <dependency>
@@ -590,7 +598,6 @@
                 </plugin>
             </plugins>
         </pluginManagement>
-
         <plugins>
             <plugin>
                 <groupId>org.mybatis.generator</groupId>
