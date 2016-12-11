@@ -44,7 +44,7 @@ public class OrderUtil {
 
 
     public static OrderRecord buildOrderRecord(Order order) {
-        //TODO支付流水号不能为空
+        //TODO 支付流水号不能为空   测试:默认事务蛤蜊级别(read write)下 对一个数据查询出来 进行+操作 然后update 有没有问题!
         logger.info("封装orderRecord实体...");
         OrderRecord record = Creator.newInstance(order, OrderRecord.class);
         record.setId(null);
