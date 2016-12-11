@@ -11,7 +11,7 @@ public interface Dao<E, PK extends Serializable> {
 
     int insert(E entity) throws DataAccessException;
 
-    int update(String sqlId, E entity) throws DataAccessException;
+    int update(E entity) throws DataAccessException;
 
     int updateByParam(String sqlId, Object param);
 

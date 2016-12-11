@@ -50,8 +50,8 @@ public class BaseDao<E, PK extends Serializable> extends SqlSessionDaoSupport im
     }
 
     @Override
-    public int update(String sqlId, E entity) throws DataAccessException {
-        String sqlId0 = this.buildFullSqlId(sqlId);
+    public int update(E entity) throws DataAccessException {
+        String sqlId0 = this.getUpdateStatement();
         this.prepareObjectBeforeUpdate(entity);
         int i = this.getSqlSession().update(sqlId0, entity);
         this.prepareObjectAfterUpdate(entity);
@@ -96,6 +96,10 @@ public class BaseDao<E, PK extends Serializable> extends SqlSessionDaoSupport im
 
 
     private String getInsertStatement() {
+        return this.buildFullSqlId(SqlMapStatementEnum.INSERT_OBJECT.getStatementId());
+    }
+
+    private String getUpdateStatement() {
         return this.buildFullSqlId(SqlMapStatementEnum.INSERT_OBJECT.getStatementId());
     }
 

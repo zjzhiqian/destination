@@ -13,20 +13,23 @@
         <destination.version>1.0.0-SNAPSHOT</destination.version>
         <common.config.version>1.0.0-SNAPSHOT</common.config.version>
         <common.base.version>1.0.0-SNAPSHOT</common.base.version>
-        <common.dubbo.admin>1.0.0-SNAPCHOT</common.dubbo.admin>
         <common.message.version>1.0.0-SNAPSHOT</common.message.version>
         <common.message.api.version>1.0.0-SNAPSHOT</common.message.api.version>
 
         <test.base.verion>1.0.0-SNAPSHOT</test.base.verion>
-        <test.base.api.verion>1.0.0-SNAPSHOT</test.base.api.verion>
-        <test.spring.app.version>1.0.0-SNAPSHOT</test.spring.app.version>
-        <test.springboot.app.version>1.0.0-SNAPSHOT</test.springboot.app.version>
+        <springboot.app.version>1.0.0-SNAPSHOT</springboot.app.version>
+
+
+        <service.order.version>1.0.0-SNAPSHOT</service.order.version>
+        <service.order.api.version>1.0.0-SNAPSHOT</service.order.api.version>
+        <service.user.version>1.0.0-SNAPSHOT</service.user.version>
+        <service.user.api.version>1.0.0-SNAPSHOT</service.user.api.version>
 
 
 
         <dubbo.version>2.5.4</dubbo.version>
         <commons-io.version>2.4</commons-io.version>
-        <spring.version>4.1.2.RELEASE</spring.version>
+        <spring.version>4.3.2.RELEASE</spring.version>
         <javassist_version>3.19.0-GA</javassist_version>
         <netty_version>3.2.5.Final</netty_version>
         <mina_version>1.1.7</mina_version>
@@ -84,20 +87,26 @@
 
         <activemq.version>5.11.4</activemq.version>
         <activemq.hawtbuf.version>1.11</activemq.hawtbuf.version>
+
+        <cglib.version>2.2</cglib.version>
+        <aspectjrt.version>1.5.3</aspectjrt.version>
+        <aspectjweaver.version>1.8.9</aspectjweaver.version>
     </properties>
 
 
     <modules>
         <module>common-base</module>
-        <module>common-dubbo-admin</module>
         <module>common-config</module>
         <module>common-message</module>
         <module>common-message-api</module>
 
         <module>test-base</module>
-        <module>test-base-api</module>
-        <module>test-springboot-app</module>
-        <module>test-spring-app</module>
+        <module>springboot-app</module>
+
+        <module>service-order</module>
+        <module>service-order-api</module>
+        <module>service-user</module>
+        <module>service-user-api</module>
 
     </modules>
 
@@ -202,6 +211,17 @@
                 <artifactId>javassist</artifactId>
                 <version>${javassist_version}</version>
             </dependency>
+            <dependency>
+                <groupId>aspectj</groupId>
+                <artifactId>aspectjrt</artifactId>
+                <version>${aspectjrt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjweaver</artifactId>
+                <version>${aspectjweaver.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.jboss.netty</groupId>
                 <artifactId>netty</artifactId>
@@ -504,6 +524,13 @@
                 <artifactId>activemq-all</artifactId>
                 <version>${activemq.version}</version>
             </dependency>
+
+
+            <dependency>
+                <groupId>cglib</groupId>
+                <artifactId>cglib-nodep</artifactId>
+                <version>${cglib.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -512,7 +539,7 @@
         <repository>
             <id>nexus</id>
             <name>nexus</name>
-            <url>http://192.168.29.104:8081/nexus/content/groups/public</url>
+            <url>http://192.168.145.150:8081/nexus/content/groups/public</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -525,7 +552,7 @@
         <pluginRepository>
             <id>nexus</id>
             <name>nexus</name>
-            <url>http://192.168.29.104:8081/nexus/content/groups/public</url>
+            <url>http://192.168.145.150:8081/nexus/content/groups/public</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -538,11 +565,11 @@
     <distributionManagement>
         <snapshotRepository>
             <id>snapshots</id>
-            <url>http://admin:admin123@192.168.29.104:8081/nexus/content/repositories/snapshots</url>
+            <url>http://admin:admin123@192.168.145.150:8081/nexus/content/repositories/snapshots</url>
         </snapshotRepository>
         <repository>
             <id>releases</id>
-            <url>http://admin:admin123@192.168.29.104:8081/nexus/content/repositories/releases</url>
+            <url>http://admin:admin123@192.168.145.150:8081/nexus/content/repositories/releases</url>
         </repository>
     </distributionManagement>
 

@@ -35,6 +35,5 @@ public class MessageServiceConsumer {
     @Test
 //    @DatabaseSetup("classpath:dbunit/default_account.xml")
     public void test01() {
-
     }
 }

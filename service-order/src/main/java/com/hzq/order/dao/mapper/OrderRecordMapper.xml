@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hzq.order.dao.OrderRecordMapper" >
+
+  <insert id="insert" parameterType="com.hzq.order.entity.OrderRecord" useGeneratedKeys="true"
+          keyProperty="id" >
+    insert into order_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="merchantName != null" >
+        merchant_name,
+      </if>
+      <if test="merchantId != null" >
+        merchant_id,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="productName != null" >
+        product_name,
+      </if>
+      <if test="creater != null" >
+        creater,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createdAt != null" >
+        created_at,
+      </if>
+      <if test="updatedAt != null" >
+        updated_at,
+      </if>
+      <if test="orderAmount != null" >
+        order_amount,
+      </if>
+      <if test="orderFrom != null" >
+        order_from,
+      </if>
+      <if test="orderIp != null" >
+        order_ip,
+      </if>
+      <if test="platIncome != null" >
+        plat_income,
+      </if>
+      <if test="feeRate != null" >
+        fee_rate,
+      </if>
+      <if test="platCost != null" >
+        plat_cost,
+      </if>
+      <if test="platProfit != null" >
+        plat_profit,
+      </if>
+      <if test="completeTime != null" >
+        complete_time,
+      </if>
+      <if test="trxNo != null" >
+        trx_no,
+      </if>
+      <if test="bankOrderNo != null" >
+        bank_order_no,
+      </if>
+      <if test="bankTrxNo != null" >
+        bank_trx_no,
+      </if>
+      <if test="payerUserNo != null" >
+        payer_user_no,
+      </if>
+      <if test="payerName != null" >
+        payer_name,
+      </if>
+      <if test="payerPayAmount != null" >
+        payer_pay_amount,
+      </if>
+      <if test="payerFee != null" >
+        payer_fee,
+      </if>
+      <if test="payerAccountType != null" >
+        payer_account_type,
+      </if>
+      <if test="receiverUserNo != null" >
+        receiver_user_no,
+      </if>
+      <if test="receiverName != null" >
+        receiver_name,
+      </if>
+      <if test="receiverPayAmount != null" >
+        receiver_pay_amount,
+      </if>
+      <if test="receiverFee != null" >
+        receiver_fee,
+      </if>
+      <if test="bankReturnMsg != null" >
+        bank_return_msg,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="merchantName != null" >
+        #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantId != null" >
+        #{merchantId,jdbcType=INTEGER},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null" >
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="creater != null" >
+        #{creater,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createdAt != null" >
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null" >
+        #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderAmount != null" >
+        #{orderAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="orderFrom != null" >
+        #{orderFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="orderIp != null" >
+        #{orderIp,jdbcType=VARCHAR},
+      </if>
+      <if test="platIncome != null" >
+        #{platIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="feeRate != null" >
+        #{feeRate,jdbcType=DECIMAL},
+      </if>
+      <if test="platCost != null" >
+        #{platCost,jdbcType=DECIMAL},
+      </if>
+      <if test="platProfit != null" >
+        #{platProfit,jdbcType=DECIMAL},
+      </if>
+      <if test="completeTime != null" >
+        #{completeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="trxNo != null" >
+        #{trxNo,jdbcType=VARCHAR},
+      </if>
+      <if test="bankOrderNo != null" >
+        #{bankOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="bankTrxNo != null" >
+        #{bankTrxNo,jdbcType=VARCHAR},
+      </if>
+      <if test="payerUserNo != null" >
+        #{payerUserNo,jdbcType=VARCHAR},
+      </if>
+      <if test="payerName != null" >
+        #{payerName,jdbcType=VARCHAR},
+      </if>
+      <if test="payerPayAmount != null" >
+        #{payerPayAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="payerFee != null" >
+        #{payerFee,jdbcType=DECIMAL},
+      </if>
+      <if test="payerAccountType != null" >
+        #{payerAccountType,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverUserNo != null" >
+        #{receiverUserNo,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverName != null" >
+        #{receiverName,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverPayAmount != null" >
+        #{receiverPayAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="receiverFee != null" >
+        #{receiverFee,jdbcType=DECIMAL},
+      </if>
+      <if test="bankReturnMsg != null" >
+        #{bankReturnMsg,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="com.hzq.order.entity.OrderRecord" >
+    update order_record
+    <set >
+      <if test="merchantName != null" >
+        merchant_name = #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantId != null" >
+        merchant_id = #{merchantId,jdbcType=INTEGER},
+      </if>
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null" >
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="creater != null" >
+        creater = #{creater,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createdAt != null" >
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null" >
+        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderAmount != null" >
+        order_amount = #{orderAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="orderFrom != null" >
+        order_from = #{orderFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="orderIp != null" >
+        order_ip = #{orderIp,jdbcType=VARCHAR},
+      </if>
+      <if test="platIncome != null" >
+        plat_income = #{platIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="feeRate != null" >
+        fee_rate = #{feeRate,jdbcType=DECIMAL},
+      </if>
+      <if test="platCost != null" >
+        plat_cost = #{platCost,jdbcType=DECIMAL},
+      </if>
+      <if test="platProfit != null" >
+        plat_profit = #{platProfit,jdbcType=DECIMAL},
+      </if>
+      <if test="completeTime != null" >
+        complete_time = #{completeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="trxNo != null" >
+        trx_no = #{trxNo,jdbcType=VARCHAR},
+      </if>
+      <if test="bankOrderNo != null" >
+        bank_order_no = #{bankOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="bankTrxNo != null" >
+        bank_trx_no = #{bankTrxNo,jdbcType=VARCHAR},
+      </if>
+      <if test="payerUserNo != null" >
+        payer_user_no = #{payerUserNo,jdbcType=VARCHAR},
+      </if>
+      <if test="payerName != null" >
+        payer_name = #{payerName,jdbcType=VARCHAR},
+      </if>
+      <if test="payerPayAmount != null" >
+        payer_pay_amount = #{payerPayAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="payerFee != null" >
+        payer_fee = #{payerFee,jdbcType=DECIMAL},
+      </if>
+      <if test="payerAccountType != null" >
+        payer_account_type = #{payerAccountType,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverUserNo != null" >
+        receiver_user_no = #{receiverUserNo,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverName != null" >
+        receiver_name = #{receiverName,jdbcType=VARCHAR},
+      </if>
+      <if test="receiverPayAmount != null" >
+        receiver_pay_amount = #{receiverPayAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="receiverFee != null" >
+        receiver_fee = #{receiverFee,jdbcType=DECIMAL},
+      </if>
+      <if test="bankReturnMsg != null" >
+        bank_return_msg = #{bankReturnMsg,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

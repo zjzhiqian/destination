@@ -5,7 +5,8 @@ package com.hzq.base.dao;
  */
 public enum SqlMapStatementEnum {
     GET_BY_ID(".getByPk", "根据ID去查询的通用statement"),
-    INSERT_OBJECT(".insert", "插入对象的通用statement");
+    INSERT_OBJECT(".insert", "插入对象的通用statement"),
+    UPDATE_OBJECT(".update", "查询对象的通用statement");
 
     private String statementId;
     private String desc;

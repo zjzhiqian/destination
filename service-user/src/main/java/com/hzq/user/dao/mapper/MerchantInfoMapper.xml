@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hzq.user.dao.MerchantInfoMapper" >
+
+  <select id="getByPk" resultType="com.hzq.user.entity.MerchantInfo">
+    select 
+    *
+    from merchant_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+
+  <!--<insert id="insert" parameterType="com.hzq.user.entity.MerchantInfo" >-->
+    <!--insert into merchant_info-->
+    <!--<trim prefix="(" suffix=")" suffixOverrides="," >-->
+      <!--<if test="id != null" >-->
+        <!--id,-->
+      <!--</if>-->
+      <!--<if test="userName != null" >-->
+        <!--user_name,-->
+      <!--</if>-->
+      <!--<if test="accountId != null" >-->
+        <!--account_id,-->
+      <!--</if>-->
+      <!--<if test="createdAt != null" >-->
+        <!--created_at,-->
+      <!--</if>-->
+      <!--<if test="updatedAt != null" >-->
+        <!--updated_at,-->
+      <!--</if>-->
+    <!--</trim>-->
+    <!--<trim prefix="values (" suffix=")" suffixOverrides="," >-->
+      <!--<if test="id != null" >-->
+        <!--#{id,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="userName != null" >-->
+        <!--#{userName,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="accountId != null" >-->
+        <!--#{accountId,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="createdAt != null" >-->
+        <!--#{createdAt,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="updatedAt != null" >-->
+        <!--#{updatedAt,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+    <!--</trim>-->
+  <!--</insert>-->
+  <!--<update id="updateByPrimaryKeySelective" parameterType="com.hzq.user.entity.MerchantInfo" >-->
+    <!--update merchant_info-->
+    <!--<set >-->
+      <!--<if test="userName != null" >-->
+        <!--user_name = #{userName,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="accountId != null" >-->
+        <!--account_id = #{accountId,jdbcType=INTEGER},-->
+      <!--</if>-->
+      <!--<if test="createdAt != null" >-->
+        <!--created_at = #{createdAt,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="updatedAt != null" >-->
+        <!--updated_at = #{updatedAt,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+    <!--</set>-->
+    <!--where id = #{id,jdbcType=INTEGER}-->
+  <!--</update>-->
+  <!---->
+</mapper>

@@ -7,16 +7,21 @@
         <version>${destination.version}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>common-message</artifactId>
+    <artifactId>service-order</artifactId>
 
 
-    <version>${common.message.version}</version>
+    <version>${service.order.version}</version>
 
     <dependencies>
         <dependency>
             <groupId>com.hzq</groupId>
-            <artifactId>common-message-api</artifactId>
-            <version>${common.message.api.version}</version>
+            <artifactId>service-order-api</artifactId>
+            <version>${service.order.api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.hzq</groupId>
+            <artifactId>service-user-api</artifactId>
+            <version>${service.user.api.version}</version>
         </dependency>
         <dependency>
             <groupId>com.hzq</groupId>
@@ -97,6 +102,22 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
         </dependency>
+
+        <!--aspect -->
+        <dependency>
+            <groupId>aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib-nodep</artifactId>
+        </dependency>
+
+
         <!--other lib-->
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -210,6 +231,8 @@
                     </execution>
                 </executions>
             </plugin>
+
+
         </plugins>
     </build>
 

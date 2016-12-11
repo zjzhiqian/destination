@@ -1,0 +1,1 @@
+http://localhost:8080/api/v3/orders/pay?productId=1&orderAmount=20&payWay=3&orderNo=100&orderIp=127.0.0.1&orderPeriod=23&expireTime=&returnUrl=returnUrl&notifyUrl=notifyUtl&remark=remark

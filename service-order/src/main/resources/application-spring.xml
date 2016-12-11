@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+
+
+    <context:component-scan base-package="com.hzq.order"/>
+
+
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:db.properties</value>
+            </list>
+        </property>
+    </bean>
+    <import resource="classpath:application-db-order.xml"/>
+
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+
+
+    <dubbo:service interface="com.hzq.order.service.OrderService" ref="orderService" version="1.0.0"/>
+
+    <dubbo:reference interface="com.hzq.user.service.ProductService" id="productService" version="1.0.0"/>
+    <dubbo:reference interface="com.hzq.user.service.MerchantInfoService" id="merchantInfoService" version="1.0.0"/>
+
+</beans>
