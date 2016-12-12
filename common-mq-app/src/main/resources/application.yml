@@ -13,4 +13,3 @@ spring:
     password:
 mybatis:
   config-location: classpath:mybatis-config.xml
-
