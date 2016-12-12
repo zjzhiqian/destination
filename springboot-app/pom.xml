@@ -8,9 +8,9 @@
 
 
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.3.2.RELEASE</version>
+        <groupId>com.hzq</groupId>
+        <artifactId>destination</artifactId>
+        <version>${destination.version}</version>
     </parent>
 
 
@@ -18,41 +18,54 @@
         <spring.version>4.3.2.RELEASE</spring.version>
     </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>1.3.2.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
+
+    <dependencies>
         <dependency>
             <groupId>com.hzq</groupId>
             <artifactId>service-order-api</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>${service.order.api.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.hzq</groupId>
             <artifactId>common-base</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>${common.base.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.hzq</groupId>
+            <artifactId>common-message-api</artifactId>
+            <version>${common.message.api.version}</version>
         </dependency>
 
 
         <dependency>
-            <groupId>com.hzq</groupId>
-            <artifactId>common-message-api</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>1.3.2.RELEASE</version>
         </dependency>
+
+
 
         <!-- logger -->
         <dependency>
             <groupId>com.github.danielwegener</groupId>
             <artifactId>logback-kafka-appender</artifactId>
-            <version>0.0.2</version>
         </dependency>
         <dependency>
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
-            <version>4.4</version>
         </dependency>
 
         <!-- dubbo -->
@@ -65,7 +78,6 @@
         <dependency>
             <groupId>org.apache.zookeeper</groupId>
             <artifactId>zookeeper</artifactId>
-            <version>3.4.6</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -78,37 +90,31 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.15</version>
         </dependency>
-
         <dependency>
             <groupId>com.github.sgroschupf</groupId>
             <artifactId>zkclient</artifactId>
-            <version>0.1</version>
         </dependency>
 
         <dependency>
             <groupId>org.javassist</groupId>
             <artifactId>javassist</artifactId>
-            <version>3.15.0-GA</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.5.2</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.4</version>
         </dependency>
 
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.4</version>
         </dependency>
+
     </dependencies>
 
     <profiles>

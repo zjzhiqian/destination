@@ -15,6 +15,7 @@
         <common.base.version>1.0.0-SNAPSHOT</common.base.version>
         <common.message.version>1.0.0-SNAPSHOT</common.message.version>
         <common.message.api.version>1.0.0-SNAPSHOT</common.message.api.version>
+        <common.mq.app.version>1.0.0-SNAPSHOT</common.mq.app.version>
 
         <test.base.verion>1.0.0-SNAPSHOT</test.base.verion>
         <springboot.app.version>1.0.0-SNAPSHOT</springboot.app.version>
@@ -98,6 +99,7 @@
         <module>common-config</module>
         <module>common-message</module>
         <module>common-message-api</module>
+        <module>common-mq-app</module>
 
         <module>test-base</module>
         <module>springboot-app</module>
@@ -112,6 +114,59 @@
 
     <dependencyManagement>
         <dependencies>
+
+
+            <!--springboot-->
+            <dependency>
+                <groupId>com.hzq</groupId>
+                <artifactId>service-order-api</artifactId>
+                <version>${service.order.api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.hzq</groupId>
+                <artifactId>common-base</artifactId>
+                <version>${common.base.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.hzq</groupId>
+                <artifactId>common-message-api</artifactId>
+                <version>${common.message.api.version}</version>
+            </dependency>
+
+
+            <!--mq-->
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>activemq-broker</artifactId>
+                <version>${activemq.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>activemq-client</artifactId>
+                <version>${activemq.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>activemq-kahadb-store</artifactId>
+                <version>${activemq.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>activemq-spring</artifactId>
+                <version>${activemq.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.fusesource.hawtbuf</groupId>
+                <artifactId>hawtbuf</artifactId>
+                <version>${activemq.hawtbuf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>activemq-pool</artifactId>
+                <version>${activemq.version}</version>
+            </dependency>
+
+            <!--dao-->
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
@@ -137,8 +192,7 @@
                 <artifactId>druid</artifactId>
                 <version>1.0.13</version>
             </dependency>
-
-
+            <!--spring-->
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-jms</artifactId>
@@ -231,43 +285,6 @@
                 <artifactId>mina-core</artifactId>
                 <version>${mina_version}</version>
             </dependency>
-
-            <dependency>
-                <groupId>org.apache.activemq</groupId>
-                <artifactId>activemq-broker</artifactId>
-                <version>${activemq.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.activemq</groupId>
-                <artifactId>activemq-client</artifactId>
-                <version>${activemq.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.activemq</groupId>
-                <artifactId>activemq-kahadb-store</artifactId>
-                <version>${activemq.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.activemq</groupId>
-                <artifactId>activemq-spring</artifactId>
-                <version>${activemq.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.fusesource.hawtbuf</groupId>
-                <artifactId>hawtbuf</artifactId>
-                <version>${activemq.hawtbuf.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-jms</artifactId>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.activemq</groupId>
-                <artifactId>activemq-pool</artifactId>
-                <version>${activemq.version}</version>
-            </dependency>
-
-
             <dependency>
                 <groupId>org.glassfish.grizzly</groupId>
                 <artifactId>grizzly-core</artifactId>
@@ -293,6 +310,16 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>hessian-lite</artifactId>
                 <version>${hessian_lite_version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.4</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>2.4</version>
             </dependency>
             <dependency>
                 <groupId>com.alibaba</groupId>
@@ -457,13 +484,11 @@
                 <artifactId>logstash-logback-encoder</artifactId>
                 <version>4.4</version>
             </dependency>
-
             <dependency>
                 <groupId>org.logback-extensions</groupId>
                 <artifactId>logback-ext-spring</artifactId>
                 <version>0.1.2</version>
             </dependency>
-
             <dependency>
                 <groupId>com.github.danielwegener</groupId>
                 <artifactId>logback-kafka-appender</artifactId>
@@ -517,19 +542,12 @@
                 <artifactId>cglib-nodep</artifactId>
                 <version>${cglib_version}</version>
             </dependency>
-
             <dependency>
                 <groupId>org.apache.activemq</groupId>
                 <artifactId>activemq-all</artifactId>
                 <version>${activemq.version}</version>
             </dependency>
 
-
-            <dependency>
-                <groupId>cglib</groupId>
-                <artifactId>cglib-nodep</artifactId>
-                <version>${cglib.version}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 

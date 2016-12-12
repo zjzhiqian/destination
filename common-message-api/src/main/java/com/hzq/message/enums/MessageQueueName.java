@@ -5,7 +5,8 @@ package com.hzq.message.enums;
  */
 public enum MessageQueueName {
 
-    ORDER_NOTIFY("订单队列", 0);
+    ORDER_NOTIFY("订单队列", 0),
+    MERCHANT_NOTIFY("商户队列", 1);
 
 
     private String context;
@@ -41,5 +42,6 @@ public enum MessageQueueName {
     public void setContext(String context) {
         this.context = context;
     }
+
 
 }

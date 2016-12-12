@@ -9,11 +9,10 @@
        ">
 
 
-
     <context:property-placeholder location="classpath:dubbo-zk.properties"/>
 
 
-    <dubbo:application name="boot"/>
+    <dubbo:application name="sboot"/>
     <dubbo:registry address="${dubbo.registry.address}"/>
 
 

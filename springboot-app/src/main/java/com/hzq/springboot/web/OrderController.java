@@ -3,6 +3,7 @@ package com.hzq.springboot.web;
 import com.hzq.order.entity.OrderParam;
 import com.hzq.order.service.OrderService;
 
+import com.hzq.springboot.entity.RawString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,10 +20,9 @@ public class OrderController {
     OrderService orderService;
 
     @PostMapping("pay")
-    public String orderPay(OrderParam orderParam) {
+    public RawString orderPay(OrderParam orderParam) {
         String result = orderService.initOrderPay(orderParam);
         System.out.println(result);
-        return result;
-
+        return new RawString(result);
     }
 }

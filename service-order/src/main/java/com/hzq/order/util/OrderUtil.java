@@ -8,6 +8,7 @@ import com.hzq.order.enums.OrderStatusEnume;
 import com.hzq.user.entity.MerchantInfo;
 import com.hzq.user.entity.Product;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.IdGenerator;
 import org.springframework.util.SimpleIdGenerator;
 
@@ -20,7 +21,7 @@ import java.util.Date;
  */
 public class OrderUtil {
 
-    private static final Logger logger = org.slf4j.LoggerFactory.getLogger(OrderUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger(OrderUtil.class);
 
 
     private static final IdGenerator idGenerator = new SimpleIdGenerator();
