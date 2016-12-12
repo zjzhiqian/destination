@@ -17,16 +17,18 @@
         <property name="locations">
             <list>
                 <value>classpath:db.properties</value>
+                <value>classpath:dubbo-zk.properties</value>
             </list>
         </property>
     </bean>
 
-
     <aop:aspectj-autoproxy proxy-target-class="true"/>
-
 
     <import resource="classpath:application-db-base.xml"/>
 
+
+    <dubbo:registry address="${dubbo.registry.address.common}"/>
+    <dubbo:protocol port="${dubbo.protocol.port.user}"/>
 
     <dubbo:service interface="com.hzq.user.service.MerchantInfoService" ref="merchantInfoService" version="1.0.0"/>
     <dubbo:service interface="com.hzq.user.service.ProductService" ref="productService" version="1.0.0"/>

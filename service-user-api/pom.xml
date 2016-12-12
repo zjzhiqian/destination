@@ -12,7 +12,7 @@
     </parent>
 
     <build>
-        <finalName>${project.artifactId}-${build.type}${project.version}</finalName>
+        <finalName>${project.artifactId}-${project.version}</finalName>
     </build>
 
 

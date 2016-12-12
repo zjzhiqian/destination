@@ -539,7 +539,7 @@
         <repository>
             <id>nexus</id>
             <name>nexus</name>
-            <url>http://192.168.145.150:8081/nexus/content/groups/public</url>
+            <url>http://192.168.29.104:8081/nexus/content/groups/public</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -552,7 +552,7 @@
         <pluginRepository>
             <id>nexus</id>
             <name>nexus</name>
-            <url>http://192.168.145.150:8081/nexus/content/groups/public</url>
+            <url>http://192.168.29.104:8081/nexus/content/groups/public</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -565,45 +565,13 @@
     <distributionManagement>
         <snapshotRepository>
             <id>snapshots</id>
-            <url>http://admin:admin123@192.168.145.150:8081/nexus/content/repositories/snapshots</url>
+            <url>http://admin:admin123@192.168.29.104:8081/nexus/content/repositories/snapshots</url>
         </snapshotRepository>
         <repository>
             <id>releases</id>
-            <url>http://admin:admin123@192.168.145.150:8081/nexus/content/repositories/releases</url>
+            <url>http://admin:admin123@192.168.29.104:8081/nexus/content/repositories/releases</url>
         </repository>
     </distributionManagement>
-
-    <profiles>
-        <profile>
-            <id>dev</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <build.type></build.type>
-                <runtime.env>src/main/resources</runtime.env>
-                <final.name>${project.artifactId}</final.name>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>test</id>
-            <properties>
-                <build.type>test</build.type>
-                <runtime.env>src/main/resources_test</runtime.env>
-                <final.name>${project.artifactId}</final.name>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>prod</id>
-            <properties>
-                <build.type>prod</build.type>
-                <runtime.env>src/main/resources_prod</runtime.env>
-                <final.name>${project.artifactId}</final.name>
-            </properties>
-        </profile>
-    </profiles>
 
 
     <build>

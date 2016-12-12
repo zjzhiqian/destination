@@ -19,12 +19,18 @@
         <property name="locations">
             <list>
                 <value>classpath:db.properties</value>
+                <value>classpath:dubbo-zk.properties</value>
             </list>
         </property>
     </bean>
+
     <import resource="classpath:application-db-order.xml"/>
 
     <aop:aspectj-autoproxy proxy-target-class="true"/>
+
+
+    <dubbo:registry address="${dubbo.registry.address.common}"/>
+    <dubbo:protocol port="${dubbo.protocol.port.order}"/>
 
 
     <dubbo:service interface="com.hzq.order.service.OrderService" ref="orderService" version="1.0.0"/>

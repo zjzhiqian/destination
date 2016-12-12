@@ -22,41 +22,8 @@
     </dependencies>
 
 
-    <profiles>
-        <profile>
-            <id>dev</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <build.type></build.type>
-                <runtime.env>src/main/resources</runtime.env>
-                <final.name>${project.artifactId}</final.name>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>test</id>
-            <properties>
-                <build.type>test</build.type>
-                <runtime.env>src/main/resources_test</runtime.env>
-                <final.name>${project.artifactId}</final.name>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>prod</id>
-            <properties>
-                <build.type>prod</build.type>
-                <runtime.env>src/main/resources_prod</runtime.env>
-                <final.name>${project.artifactId}</final.name>
-            </properties>
-        </profile>
-    </profiles>
-
-
     <build>
-        <finalName>${project.artifactId}-${build.type}${project.version}</finalName>
+        <finalName>${project.artifactId}-${project.version}</finalName>
     </build>
 
 
