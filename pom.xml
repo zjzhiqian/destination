@@ -26,7 +26,6 @@
         <service.user.api.version>1.0.0-SNAPSHOT</service.user.api.version>
 
 
-
         <dubbo.version>2.5.4</dubbo.version>
         <commons-io.version>2.4</commons-io.version>
         <spring.version>4.3.2.RELEASE</spring.version>

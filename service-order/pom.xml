@@ -28,11 +28,6 @@
             <artifactId>common-base</artifactId>
             <version>${common.base.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.hzq</groupId>
-            <artifactId>common-config</artifactId>
-            <version>${common.config.version}</version>
-        </dependency>
 
         <!--mq support-->
         <dependency>
@@ -171,6 +166,40 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+
+    <profiles>
+        <profile>
+            <id>home</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <resources>
+                    <resource>
+                        <directory>../common-config/src/main/resources_home</directory>
+                        <includes>
+                            <include>**/*.*</include>
+                        </includes>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+
+        <profile>
+            <id>comp</id>
+            <build>
+                <resources>
+                    <resource>
+                        <directory>../common-config/src/main/resources_comp</directory>
+                        <includes>
+                            <include>**/*.*</include>
+                        </includes>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+    </profiles>
 
 
     <build>

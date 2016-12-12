@@ -25,12 +25,6 @@
         </dependency>
         <dependency>
             <groupId>com.hzq</groupId>
-            <artifactId>common-config</artifactId>
-            <version>${common.config.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.hzq</groupId>
             <artifactId>service-user-api</artifactId>
             <version>${service.user.api.version}</version>
         </dependency>
@@ -178,15 +172,48 @@
         </dependency>
     </dependencies>
 
+
+    <profiles>
+        <profile>
+            <id>home</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <resources>
+                    <resource>
+                        <directory>../common-config/src/main/resources_home</directory>
+                        <includes>
+                            <include>**/*.*</include>
+                        </includes>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+
+        <profile>
+            <id>comp</id>
+            <build>
+                <resources>
+                    <resource>
+                        <directory>../common-config/src/main/resources_comp</directory>
+                        <includes>
+                            <include>**/*.*</include>
+                        </includes>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+    </profiles>
+
+
     <build>
         <finalName>${project.artifactId}-${project.version}</finalName>
-
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
                 <targetPath>${project.build.directory}/classes</targetPath>
             </resource>
-
             <resource>
                 <directory>src/main/java</directory>
                 <includes>
@@ -194,7 +221,6 @@
                 </includes>
             </resource>
         </resources>
-
         <plugins>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
