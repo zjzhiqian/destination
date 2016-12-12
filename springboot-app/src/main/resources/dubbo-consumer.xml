@@ -5,7 +5,26 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
        http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
+
+
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:dubbo-zk.properties</value>
+            </list>
+        </property>
+    </bean>
+
+
     <dubbo:application name="boot"/>
-    <dubbo:registry address="zookeeper://192.168.145.201:2181"/>
-    <dubbo:reference interface=" com.hzq.order.service.OrderService" version="1.0.0" id="orderService"/>
+    <dubbo:registry address="${dubbo.registry.address}"/>
+
+
+    <dubbo:reference interface="com.hzq.order.service.OrderService"
+                     version="1.0.0" id="orderService"/>
+    <!--<dubbo:reference interface="com.hzq.message.service.MessageService"-->
+                     <!--version="1.0.0" id="messageService"/>-->
+
+
 </beans>

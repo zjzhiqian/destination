@@ -41,7 +41,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Map<String, String> initOrderPay(OrderParam orderParam) {
+    public String initOrderPay(OrderParam orderParam) {
         Integer productId = orderParam.getProductId();
         String orderNo = orderParam.getOrderNo();
         BigDecimal orderAmount = orderParam.getOrderAmount();
@@ -75,7 +75,7 @@ public class OrderServiceImpl implements OrderService {
         orderRecord.setBankReturnMsg("银行返回结果");
         orderRecordMapper.update(orderRecord);
 
-        return ImmutableMap.of("message", "支付成功!");
+        return "支付成功";
     }
 
 

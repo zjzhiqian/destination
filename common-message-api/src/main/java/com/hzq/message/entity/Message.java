@@ -36,6 +36,17 @@ public class Message implements Serializable {
 
     private String messageBody;
 
+    public Message() {
+
+    }
+
+    public Message(String messageId, String consumerQueue, String messageBody) {
+        this.messageId = messageId;
+        this.consumerQueue = consumerQueue;
+        this.messageBody = messageBody;
+    }
+
+
     public Integer getId() {
         return id;
     }

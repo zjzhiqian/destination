@@ -25,7 +25,7 @@ import javax.annotation.Resource;
 //        DbUnitTestExecutionListener.class,
 //        DirtiesContextTestExecutionListener.class,
 //        TransactionalTestExecutionListener.class})
-@Transactional
+//@Transactional
 public class MessageServiceConsumer {
 
 
@@ -35,5 +35,11 @@ public class MessageServiceConsumer {
     @Test
 //    @DatabaseSetup("classpath:dbunit/default_account.xml")
     public void test01() {
+        Message message = new Message();
+        message.setConsumerQueue("queue1");
+        message.setMessageId("idwefhweiuh");
+        message.setMessageBody("body");
+        messageService.preSaveMessage(message);
+
     }
 }

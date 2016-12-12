@@ -8,8 +8,12 @@ import com.hzq.order.enums.OrderStatusEnume;
 import com.hzq.user.entity.MerchantInfo;
 import com.hzq.user.entity.Product;
 import org.slf4j.Logger;
+import org.springframework.util.IdGenerator;
+import org.springframework.util.SimpleIdGenerator;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by hzq on 16/12/11.
@@ -17,6 +21,9 @@ import java.math.BigDecimal;
 public class OrderUtil {
 
     private static final Logger logger = org.slf4j.LoggerFactory.getLogger(OrderUtil.class);
+
+
+    private static final IdGenerator idGenerator = new SimpleIdGenerator();
 
     /**
      * 生成order实体
@@ -44,7 +51,7 @@ public class OrderUtil {
 
 
     public static OrderRecord buildOrderRecord(Order order) {
-        //TODO 支付流水号不能为空   测试:默认事务蛤蜊级别(read write)下 对一个数据查询出来 进行+操作 然后update 有没有问题!
+        //TODO  测试:默认事务隔离级别(read write)下 对一个数据查询出来 进行+操作 然后update 有没有问题!
         logger.info("封装orderRecord实体...");
         OrderRecord record = Creator.newInstance(order, OrderRecord.class);
         record.setId(null);
@@ -62,9 +69,14 @@ public class OrderUtil {
         record.setPlatCost(platCost);//平台成本
         record.setPlatIncome(platIncome);//平台收入
         record.setPlatProfit(platProfit);//平台利润
+
+        record.setBankOrderNo(order.getOrderNo()); //让银行订单号与商户订单号相同，方便做处理
+        //银行流水号
+        String uuid = idGenerator.generateId().toString();
+        uuid = uuid.substring(uuid.lastIndexOf("-") + 1); //12位
+        String txNo = new SimpleDateFormat("MMddHHmmssSSS").format(new Date()) + uuid;
+        record.setTrxNo(txNo);
 //        private Date completeTime;
-//        private String trxNo;
-//        private String bankOrderNo;
 //        private String bankTrxNo;
 //        private String payerUserNo;
 //        private String payerName;

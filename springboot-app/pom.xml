@@ -37,6 +37,14 @@
         </dependency>
 
 
+        <dependency>
+            <groupId>com.hzq</groupId>
+            <artifactId>common-message-api</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+
+
         <!-- dubbo -->
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -54,6 +62,13 @@
                     <artifactId>slf4j-log4j12</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <!-- fastJson -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.15</version>
         </dependency>
 
         <dependency>
@@ -84,19 +99,28 @@
             <artifactId>commons-io</artifactId>
             <version>2.4</version>
         </dependency>
-
-
     </dependencies>
+
+
+
+
 
     <build>
         <finalName>${project.artifactId}-${project.version}</finalName>
         <resources>
+            <resource>
+                <directory>../common-config/src/main/resources</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
             <resource>
                 <directory>src/main/resources</directory>
                 <includes>
                     <include>**/*.*</include>
                 </includes>
             </resource>
+
             <resource>
                 <directory>src/main/java</directory>
                 <includes>
