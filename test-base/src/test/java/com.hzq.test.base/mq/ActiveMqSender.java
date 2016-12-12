@@ -22,7 +22,7 @@ public class ActiveMqSender {
         ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(
                 ActiveMQConnection.DEFAULT_USER,
                 ActiveMQConnection.DEFAULT_PASSWORD,
-                "failover://tcp://192.168.29.101:61616");
+                "failover://tcp://192.168.145.150:61616");
 
         Connection connection = null;
         try {
@@ -33,7 +33,7 @@ public class ActiveMqSender {
             //创建session
             Session session = connection.createSession(true, Session.AUTO_ACKNOWLEDGE);
             //创建一个名称为HelloWorld的消息队列
-            Destination destination = session.createQueue("HelloWorld");
+            Destination destination = session.createQueue("ORDER_NOTIFY");
             //创建消息生产者
             MessageProducer messageProducer = session.createProducer(destination);
             //发送消息
