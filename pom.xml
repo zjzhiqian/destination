@@ -19,6 +19,7 @@
 
         <test.base.verion>1.0.0-SNAPSHOT</test.base.verion>
         <springboot.app.version>1.0.0-SNAPSHOT</springboot.app.version>
+        <springboot.app.test.version>1.0.0-SNAPSHOT</springboot.app.test.version>
 
 
         <service.order.version>1.0.0-SNAPSHOT</service.order.version>

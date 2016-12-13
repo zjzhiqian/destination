@@ -25,6 +25,7 @@
         </property>
     </bean>
 
+    <dubbo:application name="mq-app"/>
 
     <aop:aspectj-autoproxy proxy-target-class="true"/>
 
