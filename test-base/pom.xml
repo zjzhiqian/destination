@@ -48,7 +48,7 @@
 
         <dependency>
             <groupId>com.hzq</groupId>
-            <artifactId>service-account</artifactId>
+            <artifactId>service-account-api</artifactId>
             <version>${service.account.api.version}</version>
         </dependency>
 
@@ -161,6 +161,32 @@
             <scope>test</scope>
         </dependency>
 
+        <!--mq-->
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-broker</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-kahadb-store</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-spring</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.fusesource.hawtbuf</groupId>
+            <artifactId>hawtbuf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-pool</artifactId>
+        </dependency>
+
     </dependencies>
 
     <profiles>
@@ -169,34 +195,34 @@
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
-            <!--<build>-->
-                <!--<resources>-->
-                    <!--<resource>-->
-                        <!--<directory>../common-config/src/main/resources_home</directory>-->
-                        <!--<includes>-->
-                            <!--<include>**/*.*</include>-->
-                        <!--</includes>-->
+            <build>
+                <resources>
+                    <resource>
+                        <directory>../common-config/src/main/resources_home</directory>
+                        <includes>
+                            <include>**/*.*</include>
+                        </includes>
                         <!---why引入logback.xml导致启动失败-->
-                        <!--<excludes>-->
-                            <!--<exclude>**/logback.xml</exclude>-->
-                        <!--</excludes>-->
-                    <!--</resource>-->
-                <!--</resources>-->
-            <!--</build>-->
+                        <excludes>
+                            <exclude>**/logback.xml</exclude>
+                        </excludes>
+                    </resource>
+                </resources>
+            </build>
         </profile>
 
         <profile>
             <id>comp</id>
-            <!--<build>-->
-                <!--<resources>-->
-                    <!--<resource>-->
-                        <!--<directory>../common-config/src/main/resources_comp</directory>-->
-                        <!--<includes>-->
-                            <!--<include>**/*.*</include>-->
-                        <!--</includes>-->
-                    <!--</resource>-->
-                <!--</resources>-->
-            <!--</build>-->
+            <build>
+                <resources>
+                    <resource>
+                        <directory>../common-config/src/main/resources_comp</directory>
+                        <includes>
+                            <include>**/*.*</include>
+                        </includes>
+                    </resource>
+                </resources>
+            </build>
         </profile>
     </profiles>
 
@@ -230,6 +256,10 @@
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.mybatis.generator</groupId>

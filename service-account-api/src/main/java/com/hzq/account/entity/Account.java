@@ -1,14 +1,15 @@
 package com.hzq.account.entity;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class Account {
+public class Account implements Serializable {
     private Integer id;
 
     private String accountNo;
 
-    private Integer merchantid;
+    private Integer merchantId;
 
     private BigDecimal balance;
 
@@ -19,10 +20,6 @@ public class Account {
     private BigDecimal totalIncome;
 
     private BigDecimal totalExpend;
-
-    private BigDecimal todayIncome;
-
-    private BigDecimal todayExpend;
 
     private Date createdAt;
 
@@ -44,12 +41,12 @@ public class Account {
         this.accountNo = accountNo;
     }
 
-    public Integer getMerchantid() {
-        return merchantid;
+    public Integer getMerchantId() {
+        return merchantId;
     }
 
-    public void setMerchantid(Integer merchantid) {
-        this.merchantid = merchantid;
+    public void setMerchantId(Integer merchantId) {
+        this.merchantId = merchantId;
     }
 
     public BigDecimal getBalance() {
@@ -90,22 +87,6 @@ public class Account {
 
     public void setTotalExpend(BigDecimal totalExpend) {
         this.totalExpend = totalExpend;
-    }
-
-    public BigDecimal getTodayIncome() {
-        return todayIncome;
-    }
-
-    public void setTodayIncome(BigDecimal todayIncome) {
-        this.todayIncome = todayIncome;
-    }
-
-    public BigDecimal getTodayExpend() {
-        return todayExpend;
-    }
-
-    public void setTodayExpend(BigDecimal todayExpend) {
-        this.todayExpend = todayExpend;
     }
 
     public Date getCreatedAt() {

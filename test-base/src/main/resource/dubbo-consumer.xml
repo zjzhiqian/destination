@@ -11,12 +11,10 @@
 
     <context:property-placeholder location="classpath:dubbo-zk.properties"/>
 
-
-    <dubbo:application name="test-springboot"/>
+    <dubbo:application name="application-boot-app"/>
     <dubbo:registry address="${dubbo.registry.address}"/>
 
-
-    <dubbo:reference interface="com.hzq.account.service.AccountService" id="accountService" version="${dubbo.service.order.AccountService.version}"/>
+    <dubbo:reference interface="com.hzq.account.service.AccountService" id="accountService" version="${dubbo.service.AccountService.version}" check="false"/>
 
 
 </beans>

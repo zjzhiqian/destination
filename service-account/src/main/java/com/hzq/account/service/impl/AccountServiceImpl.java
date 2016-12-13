@@ -27,27 +27,17 @@ public class AccountServiceImpl implements AccountService {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Account addAmountToMerchant(Integer merchantId, BigDecimal amount, String bankOrderNo, String bankTrxNo) {
+
         Account account = accountMapper.getAccountByMerchantId(merchantId);
-        Date lastModifyDate = account.getUpdatedAt();
-        if (!DateUtils.isSameDayWithToday(lastModifyDate)) {
-            account.setTodayExpend(BigDecimal.ZERO);
-            account.setTodayIncome(BigDecimal.ZERO);
-        }
-        // 总收益累加和今日收益
-        account.setTotalIncome(account.getTotalIncome().add(amount));
-        if (DateUtils.isSameDayWithToday(lastModifyDate)) {
-            account.setTodayIncome(account.getTodayIncome().add(amount));
-        } else {
-            account.setTodayIncome(amount);
-        }
-        account.setBalance(account.getBalance().add(amount));
+
+        accountMapper.addAmountByMerchantId(merchantId, amount);
         // 记录账户历史
         AccountHistory accountHistory = new AccountHistory();
         accountHistory.setMerchantId(merchantId);
         accountHistory.setAmount(amount);
-        accountHistory.setBalance(account.getBalance());
+        accountHistory.setBalance(account.getBalance());//TODO 这样会有问题
         accountHistory.setRequestNo(bankOrderNo);
         accountHistory.setBankTrxNo(bankTrxNo);
         accountHistory.setAccountNo(account.getAccountNo());

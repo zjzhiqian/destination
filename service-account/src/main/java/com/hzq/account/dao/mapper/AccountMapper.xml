@@ -9,6 +9,12 @@
     where merchant_id = #{merchantId,jdbcType=INTEGER}
   </select>
 
+
+  <update id="addAmountByMerchantId">
+    update account set amount = amount + #{amount} where merchant_id = #{merchantId}
+  </update>
+
+
   <insert id="insert" parameterType="com.hzq.account.entity.Account" >
     insert into account
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -18,8 +24,8 @@
       <if test="accountNo != null" >
         account_no,
       </if>
-      <if test="merchantid != null" >
-        merchantId,
+      <if test="merchantId != null" >
+        merchant_id,
       </if>
       <if test="balance != null" >
         balance,
@@ -56,8 +62,8 @@
       <if test="accountNo != null" >
         #{accountNo,jdbcType=VARCHAR},
       </if>
-      <if test="merchantid != null" >
-        #{merchantid,jdbcType=INTEGER},
+      <if test="merchantId != null" >
+        #{merchantId,jdbcType=INTEGER},
       </if>
       <if test="balance != null" >
         #{balance,jdbcType=DECIMAL},
@@ -94,8 +100,8 @@
       <if test="accountNo != null" >
         account_no = #{accountNo,jdbcType=VARCHAR},
       </if>
-      <if test="merchantid != null" >
-        merchantId = #{merchantid,jdbcType=INTEGER},
+      <if test="merchantId != null" >
+        merchant_id = #{merchantId,jdbcType=INTEGER},
       </if>
       <if test="balance != null" >
         balance = #{balance,jdbcType=DECIMAL},
