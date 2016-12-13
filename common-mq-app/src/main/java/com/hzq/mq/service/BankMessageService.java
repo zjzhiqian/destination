@@ -7,9 +7,7 @@ import org.springframework.stereotype.Service;
  * Created by hzq on 16/12/12.
  */
 @Service
-public class BankMessageService {
+public interface BankMessageService {
 
-    public void completePay(OrderNotify orderNotify){
-
-    }
+    void completePay(OrderNotify orderNotify);
 }

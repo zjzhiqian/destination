@@ -22,7 +22,7 @@ public class ActiveMqSender {
         ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(
                 ActiveMQConnection.DEFAULT_USER,
                 ActiveMQConnection.DEFAULT_PASSWORD,
-                "failover://tcp://192.168.145.150:61616");
+                "failover://tcp://192.168.29.101:61616");
 
         Connection connection = null;
         try {

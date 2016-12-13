@@ -1,6 +1,13 @@
 package com.hzq.order.util;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.hzq.accounting.entity.Accounting;
+import com.hzq.accounting.entity.AccountingMessage;
 import com.hzq.base.util.Creator;
+import com.hzq.base.util.UUIDUtils;
+import com.hzq.message.entity.Message;
+import com.hzq.message.enums.MessageQueueName;
 import com.hzq.order.entity.Order;
 import com.hzq.order.entity.OrderParam;
 import com.hzq.order.entity.OrderRecord;
@@ -71,12 +78,7 @@ public class OrderUtil {
         record.setPlatIncome(platIncome);//平台收入
         record.setPlatProfit(platProfit);//平台利润
 
-        record.setBankOrderNo(order.getOrderNo()); //让银行订单号与商户订单号相同，方便做处理
-        //银行流水号
-        String uuid = idGenerator.generateId().toString();
-        uuid = uuid.substring(uuid.lastIndexOf("-") + 1); //12位
-        String txNo = new SimpleDateFormat("MMddHHmmssSSS").format(new Date()) + uuid;
-        record.setTrxNo(txNo);
+
 //        private Date completeTime;
 //        private String bankTrxNo;
 //        private String payerUserNo;
@@ -92,4 +94,21 @@ public class OrderUtil {
         return record;
     }
 
+    public static Message buildAccountingMessage(OrderRecord orderRecord) {
+        //封装会计需要的实体
+        AccountingMessage accounting = new AccountingMessage();
+        accounting.setVoucherNo(orderRecord.getTrxNo()); //银行流水号
+        accounting.setProfit(orderRecord.getPlatProfit());
+        accounting.setCost(orderRecord.getPlatCost());
+        accounting.setRemark("测试分布式");
+        accounting.setBankChangeAmount(orderRecord.getOrderAmount());
+        accounting.setReceiverAccountNo(orderRecord.getMerchantId() + "");
+        accounting.setBankOrderNo(orderRecord.getBankOrderNo());
+        String uuid = UUIDUtils.get32UUID();
+        accounting.setMessageId(uuid);
+        JSON.toJSONString(accounting);
+        Message message = new Message(uuid, JSON.toJSONString(accounting), MessageQueueName.ACCOUNT_NOTIFY.name());
+        message.setField1(orderRecord.getBankOrderNo()); //消息业务关联,查询消息是否被消费
+        return message;
+    }
 }
