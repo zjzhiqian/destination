@@ -8,9 +8,10 @@ import org.springframework.context.annotation.ImportResource;
  * Created by hzq on 16/12/8.
  */
 @SpringBootApplication
-@ImportResource("classpath:dubbo-consumer.xml")
-public class Application {
+@ImportResource("classpath:dubbo.xml")
+public class App {
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(Application.class, args);
+        System.out.println(1);
+        SpringApplication.run(App.class, args);
     }
 }

@@ -6,7 +6,9 @@ package com.hzq.message.enums;
 public enum MessageQueueName {
 
     ORDER_NOTIFY("订单队列", 0),
-    MERCHANT_NOTIFY("商户队列", 1);
+    MERCHANT_NOTIFY("商户队列", 1),
+    ACCOUNT_NOTIFY("会计队列", 2);
+
 
 
     private String context;

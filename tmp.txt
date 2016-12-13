@@ -24,3 +24,7 @@ http://localhost:8080/api/v3/orders/pay?productId=1&orderAmount=20&payWay=3&orde
     2.通知商户 directSend 直接发送
 
 
+
+环境切换
+    1.config两个位置切换
+    2.

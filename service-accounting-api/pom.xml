@@ -1,0 +1,28 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>service-accounting-api</artifactId>
+    <version>${service.accounting.api.version}</version>
+
+    <parent>
+        <groupId>com.hzq</groupId>
+        <artifactId>destination</artifactId>
+        <version>${destination.version}</version>
+    </parent>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>com.hzq</groupId>
+            <artifactId>common-base</artifactId>
+            <version>${common.base.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}-${project.version}</finalName>
+    </build>
+
+
+</project>

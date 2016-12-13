@@ -1,13 +1,5 @@
-
 server:
   port: 8080 # 监听端口
   context-path: /api/v3 # 访问路径
   tomcat:
     max-threads: 400
-spring:
-  profiles:
-    active: local
-
-
-mybatis:
-  config-location: classpath:mybatis-config.xml

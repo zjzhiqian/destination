@@ -19,12 +19,17 @@
 
         <test.base.verion>1.0.0-SNAPSHOT</test.base.verion>
         <springboot.app.version>1.0.0-SNAPSHOT</springboot.app.version>
+        <springboot.app.test.version>1.0.0-SNAPSHOT</springboot.app.test.version>
 
 
         <service.order.version>1.0.0-SNAPSHOT</service.order.version>
         <service.order.api.version>1.0.0-SNAPSHOT</service.order.api.version>
         <service.user.version>1.0.0-SNAPSHOT</service.user.version>
         <service.user.api.version>1.0.0-SNAPSHOT</service.user.api.version>
+        <service.accounting.version>1.0.0-SNAPSHOT</service.accounting.version>
+        <service.accounting.api.version>1.0.0-SNAPSHOT</service.accounting.api.version>
+        <service.account.version>1.0.0-SNAPSHOT</service.account.version>
+        <service.account.api.version>1.0.0-SNAPSHOT</service.account.api.version>
 
 
         <dubbo.version>2.5.4</dubbo.version>
@@ -104,6 +109,10 @@
         <module>test-base</module>
         <module>springboot-app</module>
 
+        <module>service-accounting</module>
+        <module>service-accounting-api</module>
+        <module>service-account</module>
+        <module>service-account-api</module>
         <module>service-order</module>
         <module>service-order-api</module>
         <module>service-user</module>
@@ -556,7 +565,7 @@
         <repository>
             <id>nexus</id>
             <name>nexus</name>
-            <url>http://192.168.145.150:8081/nexus/content/groups/public</url>
+            <url>http://192.168.29.104:8081/nexus/content/groups/public</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -569,7 +578,7 @@
         <pluginRepository>
             <id>nexus</id>
             <name>nexus</name>
-            <url>http://192.168.145.150:8081/nexus/content/groups/public</url>
+            <url>http://192.168.29.104:8081/nexus/content/groups/public</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -582,11 +591,11 @@
     <distributionManagement>
         <snapshotRepository>
             <id>snapshots</id>
-            <url>http://admin:admin123@192.168.145.150:8081/nexus/content/repositories/snapshots</url>
+            <url>http://admin:admin123@192.168.29.104:8081/nexus/content/repositories/snapshots</url>
         </snapshotRepository>
         <repository>
             <id>releases</id>
-            <url>http://admin:admin123@192.168.145.150:8081/nexus/content/repositories/releases</url>
+            <url>http://admin:admin123@192.168.29.104:8081/nexus/content/repositories/releases</url>
         </repository>
     </distributionManagement>
 

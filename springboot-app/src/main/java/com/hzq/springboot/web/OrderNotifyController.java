@@ -1,13 +1,5 @@
 package com.hzq.springboot.web;
 
-//import com.alibaba.fastjson.JSON;
-//import com.hzq.base.util.UUIDUtils;
-//import com.hzq.message.entity.Message;
-//import com.hzq.message.enums.MessageQueueName;
-//import com.hzq.message.service.MessageService;
-//import com.hzq.order.entity.OrderNotify;
-//import com.hzq.order.service.OrderService;
-
 import com.alibaba.fastjson.JSON;
 import com.hzq.base.util.UUIDUtils;
 import com.hzq.message.entity.Message;
@@ -39,6 +31,7 @@ public class OrderNotifyController {
     public String orderNotify(OrderNotify orderNotify) {
         //订单回调 不做校验
         String messageId = UUIDUtils.get32UUID();
+        orderNotify.setMessageId(messageId);
         Message message = new Message(messageId, MessageQueueName.ORDER_NOTIFY.toString(), JSON.toJSONString(orderNotify));
         int result = messageService.saveAndSendMessage(message);
         //通知商户

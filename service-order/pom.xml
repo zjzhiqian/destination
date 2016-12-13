@@ -13,11 +13,19 @@
     <version>${service.order.version}</version>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.hzq</groupId>
+            <artifactId>service-account-api</artifactId>
+            <version>${service.account.api.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>com.hzq</groupId>
             <artifactId>service-order-api</artifactId>
             <version>${service.order.api.version}</version>
         </dependency>
+
         <dependency>
             <groupId>com.hzq</groupId>
             <artifactId>service-user-api</artifactId>
@@ -27,6 +35,18 @@
             <groupId>com.hzq</groupId>
             <artifactId>common-base</artifactId>
             <version>${common.base.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.hzq</groupId>
+            <artifactId>common-message-api</artifactId>
+            <version>${common.message.api.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.hzq</groupId>
+            <artifactId>service-accounting-api</artifactId>
+            <version>${service.accounting.api.version}</version>
         </dependency>
 
         <!--mq support-->
@@ -112,6 +132,11 @@
             <artifactId>cglib-nodep</artifactId>
         </dependency>
 
+        <!-- fastJson -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+        </dependency>
 
         <!--other lib-->
         <dependency>
