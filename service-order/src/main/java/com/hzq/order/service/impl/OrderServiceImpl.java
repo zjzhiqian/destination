@@ -124,7 +124,7 @@ public class OrderServiceImpl implements OrderService {
                 completeSuccessOrder(orderRecord, orderNotify);
             } catch (Exception e) {
                 e.printStackTrace();
-                throw new OrderBizException();
+                throw e;
             }
             messageService.confirmAndSendMessage(message.getMessageId());
         } else {

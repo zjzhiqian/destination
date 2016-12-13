@@ -55,7 +55,7 @@ public class MessageSchedualServiceImpl implements MessageSchedualService {
             String messageId = message.getMessageId();
             String bankOrderNo = message.getField1();
 
-            if (message.getMessageSendTimes() > 5) {
+            if (message.getMessageSendTimes() >= 5) {
                 messageService.setMessageDead(messageId);
             } else {
                 //可以不用作判断,消费端必须作幂等!

@@ -25,6 +25,8 @@ public class MessageSchedualTask implements InitializingBean {
     private static final Logger logger = LoggerFactory.getLogger(MessageSchedualTask.class);
 
 
+    private static final int SCHEDUAL_SLEEP_TIME = 5;
+
     @Override
     public void afterPropertiesSet() throws Exception {
         // 开一个子线程处理 处理待确认,超时的(完成订单逻辑)的消息
@@ -32,18 +34,18 @@ public class MessageSchedualTask implements InitializingBean {
             while (true) {
                 messageSchedualService.handleWaitingConfirmTimeOutOrderCompleteQueue();
                 try {
-                    Thread.sleep(60000);
+                    TimeUnit.SECONDS.sleep(SCHEDUAL_SLEEP_TIME);
                 } catch (InterruptedException ignored) {
                 }
             }
         });
 
-        // 开一个子线程处理状态为“已确认” 但已超时的消息未删除.
+        // 开一个子线程处理状态为“已确认” 但已超时(完成订单逻辑)的消息未删除.
         executors.execute(() -> {
             while (true) {
                 messageSchedualService.handleSendingTimeOutOrderCompleteQueue();
                 try {
-                    Thread.sleep(60000);
+                    TimeUnit.SECONDS.sleep(SCHEDUAL_SLEEP_TIME);
                 } catch (InterruptedException ignored) {
                 }
             }

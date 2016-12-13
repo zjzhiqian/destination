@@ -178,6 +178,7 @@
     <select id="getLimitMessageByParam" resultType="com.hzq.message.entity.Message">
         select * from message
         where consumer_queue = #{queueName}
+        and is_dead = 0
         and status = #{status}
         and created_at &lt; date_sub(now(), interval #{times}  minute)
         limit #{count}
