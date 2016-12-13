@@ -34,6 +34,7 @@
     <dubbo:protocol port="${dubbo.protocol.port.mq}"/>
 
     <dubbo:reference interface="com.hzq.order.service.OrderService" id="orderService" version="${dubbo.service.order.OrderService.version}"/>
+    <dubbo:reference interface="com.hzq.message.service.MessageService" id="messageService" version="${dubbo.service.message.MessageService.version}"/>
 
 
 </beans>
