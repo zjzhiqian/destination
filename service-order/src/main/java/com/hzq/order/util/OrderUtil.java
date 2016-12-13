@@ -78,7 +78,6 @@ public class OrderUtil {
         record.setPlatIncome(platIncome);//平台收入
         record.setPlatProfit(platProfit);//平台利润
 
-
 //        private Date completeTime;
 //        private String bankTrxNo;
 //        private String payerUserNo;
@@ -99,6 +98,7 @@ public class OrderUtil {
         AccountingMessage accounting = new AccountingMessage();
         accounting.setVoucherNo(orderRecord.getTrxNo()); //银行流水号
         accounting.setProfit(orderRecord.getPlatProfit());
+        accounting.setIncome(orderRecord.getPlatIncome());
         accounting.setCost(orderRecord.getPlatCost());
         accounting.setRemark("测试分布式");
         accounting.setBankChangeAmount(orderRecord.getOrderAmount());
@@ -107,8 +107,8 @@ public class OrderUtil {
         String uuid = UUIDUtils.get32UUID();
         accounting.setMessageId(uuid);
         JSON.toJSONString(accounting);
-        Message message = new Message(uuid, JSON.toJSONString(accounting), MessageQueueName.ACCOUNT_NOTIFY.name());
-        message.setField1(orderRecord.getBankOrderNo()); //消息业务关联,查询消息是否被消费
+        Message message = new Message(uuid, MessageQueueName.ACCOUNT_NOTIFY.name(), JSON.toJSONString(accounting));
+        message.setField1(orderRecord.getBankOrderNo()); //**消息业务关联,查询消息是否被消费 定时器查询条件
         return message;
     }
 }

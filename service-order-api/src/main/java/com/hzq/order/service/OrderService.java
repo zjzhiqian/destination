@@ -2,6 +2,7 @@ package com.hzq.order.service;
 
 import com.hzq.order.entity.OrderNotify;
 import com.hzq.order.entity.OrderParam;
+import com.hzq.order.entity.OrderRecord;
 
 import java.util.Map;
 
@@ -18,4 +19,6 @@ public interface OrderService {
      * 支付回调
      */
     void completePay(OrderNotify orderNotify);
+
+    OrderRecord getOrderRecordByBankNo(String bankOrderNo);
 }

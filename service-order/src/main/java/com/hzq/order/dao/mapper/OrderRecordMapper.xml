@@ -4,7 +4,7 @@
 
 
   <select id="getOrderRecordByBankOrderNo" resultType="com.hzq.order.entity.OrderRecord">
-    select * from order_record where bankOrderNo = #{bankOrderNo}
+    select * from order_record where bank_order_no = #{bankOrderNo}
   </select>
 
 

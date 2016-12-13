@@ -93,7 +93,7 @@ public class OrderServiceImpl implements OrderService {
         String txNo = new SimpleDateFormat("MMddHHmmssSSS").format(new Date()) + uuid;
         record.setTrxNo(txNo);
         orderRecordMapper.update(record);
-        return "支付成功";
+        return "生成订单 发起支付成功";
     }
 
     @Override
@@ -126,25 +126,23 @@ public class OrderServiceImpl implements OrderService {
                 e.printStackTrace();
                 throw new OrderBizException();
             }
-            messageService.confirmMessage(message.getMessageId());
+            messageService.confirmAndSendMessage(message.getMessageId());
         } else {
             //返回结果失败
             completeFailOrder(orderRecord);
         }
+    }
 
-//        String bankTrxNo = orderNotify.getOutTradeNo();
-//        String timeEnd = orderNotify.getTimeEnd();
-//
-//        String bankTrxNo = //银行流水号
-//        Date timeEnd = null;//订单完成时间
-
-
+    @Override
+    public OrderRecord getOrderRecordByBankNo(String bankOrderNo) {
+        return orderRecordMapper.getOrderRecordByBankOrderNo(bankOrderNo);
     }
 
     /**
      * 收到银行支付成功消息
      */
     private void completeSuccessOrder(OrderRecord orderRecord, OrderNotify orderNotify) {
+        //TODO 这里应该做TCC事务
         orderRecord.setBankReturnMsg(JSON.toJSONString(orderNotify)); //银行返回消息
         orderRecord.setCompleteTime(orderNotify.getTimeEnd()); //支付时间
         orderRecord.setBankTrxNo(orderNotify.getTransactionId()); //银行流水号
@@ -153,9 +151,14 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderMapper.getOrderByOrderNo(orderRecord.getOrderNo());
         order.setStatus(OrderStatusEnume.PAY_SUCCESS.getVal()); //支付成功
         orderMapper.update(order);
-        BigDecimal amount = orderRecord.getOrderAmount().subtract(orderRecord.getPlatProfit());
+
+        BigDecimal amount = orderRecord.getOrderAmount().subtract(orderRecord.getPlatIncome());
         //给商户加款
         accountService.addAmountToMerchant(orderRecord.getMerchantId(), amount, orderRecord.getBankOrderNo(), orderRecord.getBankTrxNo());
+
+
+
+
     }
 
     /**

@@ -12,7 +12,7 @@
     <context:property-placeholder location="classpath:dubbo-zk.properties"/>
 
 
-    <dubbo:application name="sboot"/>
+    <dubbo:application name="spring-boot"/>
     <dubbo:registry address="${dubbo.registry.address}"/>
 
 

@@ -11,7 +11,7 @@
 
 
   <update id="addAmountByMerchantId">
-    update account set amount = amount + #{amount} where merchant_id = #{merchantId}
+    update account set balance = balance + #{amount} where merchant_id = #{merchantId}
   </update>
 
 
@@ -41,12 +41,6 @@
       </if>
       <if test="totalExpend != null" >
         total_expend,
-      </if>
-      <if test="todayIncome != null" >
-        today_income,
-      </if>
-      <if test="todayExpend != null" >
-        today_expend,
       </if>
       <if test="createdAt != null" >
         created_at,
@@ -80,12 +74,6 @@
       <if test="totalExpend != null" >
         #{totalExpend,jdbcType=DECIMAL},
       </if>
-      <if test="todayIncome != null" >
-        #{todayIncome,jdbcType=DECIMAL},
-      </if>
-      <if test="todayExpend != null" >
-        #{todayExpend,jdbcType=DECIMAL},
-      </if>
       <if test="createdAt != null" >
         #{createdAt,jdbcType=TIMESTAMP},
       </if>
@@ -117,12 +105,6 @@
       </if>
       <if test="totalExpend != null" >
         total_expend = #{totalExpend,jdbcType=DECIMAL},
-      </if>
-      <if test="todayIncome != null" >
-        today_income = #{todayIncome,jdbcType=DECIMAL},
-      </if>
-      <if test="todayExpend != null" >
-        today_expend = #{todayExpend,jdbcType=DECIMAL},
       </if>
       <if test="createdAt != null" >
         created_at = #{createdAt,jdbcType=TIMESTAMP},

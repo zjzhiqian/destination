@@ -43,7 +43,6 @@ public class AccountServiceImpl implements AccountService {
         accountHistory.setAccountNo(account.getAccountNo());
         accountHistory.setStatus(1);
         accountHistoryMapper.insert(accountHistory);
-        accountMapper.update(account);
         return account;
     }
 

@@ -5,4 +5,5 @@ import com.hzq.order.entity.OrderRecord;
 
 public interface OrderRecordMapper extends Dao<OrderRecord,Integer> {
     OrderRecord getOrderRecordByBankOrderNo(String bankOrderNo);
+
 }

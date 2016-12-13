@@ -49,12 +49,13 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public int confirmMessage(String messageId) throws MessageException {
+    public int confirmAndSendMessage(String messageId) throws MessageException {
         Message message = Optional.ofNullable(getMessageByMessageId(messageId)).orElseThrow(() -> new MessageException("消息不存在"));
         int result = 0;
         if (message.getStatus().equals(MessageStatus.PRE_CONFIRM.getVal())) {
             message.setStatus(MessageStatus.TO_SEND.getVal());
             result = messageMapper.updateByPk(message);
+            sendMessageToMq(message);
         }
         return result;
     }
@@ -108,5 +109,11 @@ public class MessageServiceImpl implements MessageService {
     public void resendDeadMessageByQueue(String queueName) throws MessageException {
         List<Message> messageList = messageMapper.selectMessagesByParam(ImmutableMap.of("queueName", queueName, "idDead", 1));
         messageList.forEach(this::sendMessageToMq);
+    }
+
+
+    @Override
+    public List<Message> getLimitMessageByParam(String queueName, int times, int status, int count) {
+        return messageMapper.getLimitMessageByParam(queueName,times,status,count);
     }
 }

@@ -5,4 +5,7 @@ import com.hzq.base.dao.Dao;
 
 public interface AccountingMapper extends Dao<Accounting,Integer> {
 
+    Accounting getAccountingByVoucherNo(String voucherNo);
+
+    Accounting getAccountingByBankOrderNo(String bankOrderNo);
 }

@@ -1,44 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.hzq.accounting.dao.AccountingMapper" >
-  <resultMap id="BaseResultMap" type="com.hzq.accounting.entity.Accounting" >
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="voucher_no" property="voucherNo" jdbcType="VARCHAR" />
-    <result column="profit" property="profit" jdbcType="DECIMAL" />
-    <result column="income" property="income" jdbcType="DECIMAL" />
-    <result column="cost" property="cost" jdbcType="DECIMAL" />
-    <result column="remark" property="remark" jdbcType="VARCHAR" />
-    <result column="bank_change_amount" property="bankChangeAmount" jdbcType="DECIMAL" />
-    <result column="receiver_account_no" property="receiverAccountNo" jdbcType="VARCHAR" />
-    <result column="bank_order_no" property="bankOrderNo" jdbcType="VARCHAR" />
-    <result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
-    <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    id, voucher_no, profit, income, cost, remark, bank_change_amount, receiver_account_no, 
-    bank_order_no, created_at, updated_at
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
+
+  <!--<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >-->
+    <!--select -->
+    <!--<include refid="Base_Column_List" />-->
+    <!--from accounting-->
+    <!--where id = #{id,jdbcType=INTEGER}-->
+  <!--</select>-->
+
+  <select id="getAccountingByVoucherNo" resultType="com.hzq.accounting.entity.Accounting">
+    select
+    *
     from accounting
-    where id = #{id,jdbcType=INTEGER}
+    where voucher_no = #{voucherNo,jdbcType=VARCHAR}
+
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from accounting
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
+
+  <select id="getAccountingByBankOrderNo" resultType="com.hzq.accounting.entity.Accounting">
+    select
+    *
+    from accounting
+    where bank_order_no = #{bankOrderNo,jdbcType=VARCHAR}
+  </select>
+
+
   <insert id="insert" parameterType="com.hzq.accounting.entity.Accounting" >
-    insert into accounting (id, voucher_no, profit, 
-      income, cost, remark, 
-      bank_change_amount, receiver_account_no, bank_order_no, 
-      created_at, updated_at)
-    values (#{id,jdbcType=INTEGER}, #{voucherNo,jdbcType=VARCHAR}, #{profit,jdbcType=DECIMAL}, 
-      #{income,jdbcType=DECIMAL}, #{cost,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, 
-      #{bankChangeAmount,jdbcType=DECIMAL}, #{receiverAccountNo,jdbcType=VARCHAR}, #{bankOrderNo,jdbcType=VARCHAR}, 
-      #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP})
-  </insert>
-  <insert id="insertSelective" parameterType="com.hzq.accounting.entity.Accounting" >
     insert into accounting
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -111,7 +98,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.hzq.accounting.entity.Accounting" >
+  <update id="update" parameterType="com.hzq.accounting.entity.Accounting" >
     update accounting
     <set >
       <if test="voucherNo != null" >
@@ -145,20 +132,6 @@
         updated_at = #{updatedAt,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.hzq.accounting.entity.Accounting" >
-    update accounting
-    set voucher_no = #{voucherNo,jdbcType=VARCHAR},
-      profit = #{profit,jdbcType=DECIMAL},
-      income = #{income,jdbcType=DECIMAL},
-      cost = #{cost,jdbcType=DECIMAL},
-      remark = #{remark,jdbcType=VARCHAR},
-      bank_change_amount = #{bankChangeAmount,jdbcType=DECIMAL},
-      receiver_account_no = #{receiverAccountNo,jdbcType=VARCHAR},
-      bank_order_no = #{bankOrderNo,jdbcType=VARCHAR},
-      created_at = #{createdAt,jdbcType=TIMESTAMP},
-      updated_at = #{updatedAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
