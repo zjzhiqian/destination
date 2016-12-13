@@ -1,13 +1,5 @@
 package com.hzq.springboot.web;
 
-//import com.alibaba.fastjson.JSON;
-//import com.hzq.base.util.UUIDUtils;
-//import com.hzq.message.entity.Message;
-//import com.hzq.message.enums.MessageQueueName;
-//import com.hzq.message.service.MessageService;
-//import com.hzq.order.entity.OrderNotify;
-//import com.hzq.order.service.OrderService;
-
 import com.alibaba.fastjson.JSON;
 import com.hzq.base.util.UUIDUtils;
 import com.hzq.message.entity.Message;
