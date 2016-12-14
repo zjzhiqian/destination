@@ -30,7 +30,7 @@
     <dubbo:registry address="${dubbo.registry.address}"/>
     <dubbo:protocol port="${dubbo.protocol.port.user}"/>
 
-    <dubbo:service interface="com.hzq.user.service.MerchantInfoService" ref="merchantInfoService" version="${dubbo.service.user.merchantInfoService.version}"/>
-    <dubbo:service interface="com.hzq.user.service.ProductService" ref="productService" version="${dubbo.service.user.productService.version}"/>
+    <dubbo:service retries="0" interface="com.hzq.user.service.MerchantInfoService" ref="merchantInfoService" version="${dubbo.service.user.merchantInfoService.version}"/>
+    <dubbo:service retries="0" interface="com.hzq.user.service.ProductService" ref="productService" version="${dubbo.service.user.productService.version}"/>
 
 </beans>

@@ -7,10 +7,12 @@ public interface MessageSchedualService {
     /**
      * 处理完成订单时的 未确认消息
      */
-    void handleWaitingConfirmTimeOutOrderCompleteQueue();
+    void handleAccountingQueuePreSave();
 
     /**
      * 处理完成订单时 已确认 未消费的信息
      */
-    void handleSendingTimeOutOrderCompleteQueue();
+    void handleAccountingQueueSend();
+
+    void handleOrderQueue();
 }

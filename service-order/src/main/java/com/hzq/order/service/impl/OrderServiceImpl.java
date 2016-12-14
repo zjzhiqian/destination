@@ -105,8 +105,10 @@ public class OrderServiceImpl implements OrderService {
         String bankOrderNo = orderNotify.getOutTradeNo();
         OrderRecord orderRecord = orderRecordMapper.getOrderRecordByBankOrderNo(bankOrderNo);
 
-        if (orderRecord == null)
-            throw new OrderBizException("订单支付记录不存在");
+        if (orderRecord == null) {
+            logger.error("订单支付记录不存在");
+            return;
+        }
         if (!OrderStatusEnume.WAIT_PAY.getVal().equals(orderRecord.getStatus())) {
             logger.info("订单为非待支付状态,不作处理");
             return;
@@ -153,10 +155,7 @@ public class OrderServiceImpl implements OrderService {
         orderMapper.update(order);
 
         BigDecimal amount = orderRecord.getOrderAmount().subtract(orderRecord.getPlatIncome());
-        //给商户加款
         accountService.addAmountToMerchant(orderRecord.getMerchantId(), amount, orderRecord.getBankOrderNo(), orderRecord.getBankTrxNo());
-
-
 
 
     }

@@ -22,33 +22,39 @@ public class MessageSchedualTask implements InitializingBean {
 
     private static final ThreadPoolExecutor executors = new ThreadPoolExecutor(5, 20, 60, TimeUnit.SECONDS, new LinkedBlockingDeque<>());
 
-    private static final Logger logger = LoggerFactory.getLogger(MessageSchedualTask.class);
-
-
-    private static final int SCHEDUAL_SLEEP_TIME = 5;
 
     @Override
     public void afterPropertiesSet() throws Exception {
         // 开一个子线程处理 处理待确认,超时的(完成订单逻辑)的消息
-        executors.execute(() -> {
-            while (true) {
-                messageSchedualService.handleWaitingConfirmTimeOutOrderCompleteQueue();
-                try {
-                    TimeUnit.SECONDS.sleep(SCHEDUAL_SLEEP_TIME);
-                } catch (InterruptedException ignored) {
-                }
-            }
-        });
-
-        // 开一个子线程处理状态为“已确认” 但已超时(完成订单逻辑)的消息未删除.
-        executors.execute(() -> {
-            while (true) {
-                messageSchedualService.handleSendingTimeOutOrderCompleteQueue();
-                try {
-                    TimeUnit.SECONDS.sleep(SCHEDUAL_SLEEP_TIME);
-                } catch (InterruptedException ignored) {
-                }
-            }
-        });
+        Runnable handleAccountingQueuePreSave = messageSchedualService::handleAccountingQueuePreSave;
+        Runnable handleAccountingQueueSend = messageSchedualService::handleAccountingQueueSend;
+        Runnable handleOrderQueue = messageSchedualService::handleOrderQueue;
+        executors.execute(new RunnableTask(handleAccountingQueuePreSave, 20));
+        executors.execute(new RunnableTask(handleAccountingQueueSend, 20));
+        executors.execute(new RunnableTask(handleOrderQueue, 20));
     }
+
+    private static class RunnableTask implements Runnable {
+
+        private final Runnable runnable;
+        private final int sleepSecond;
+
+        public RunnableTask(Runnable runnable, int sleepSecond) {
+            this.runnable = runnable;
+            this.sleepSecond = sleepSecond;
+        }
+
+        @Override
+        public void run() {
+            while (true) {
+                runnable.run();
+                try {
+                    TimeUnit.SECONDS.sleep(sleepSecond);
+                } catch (InterruptedException ignored) {
+                }
+            }
+
+        }
+    }
+
 }
