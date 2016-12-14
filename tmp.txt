@@ -29,4 +29,3 @@ http://localhost:8080/api/v3/orders/pay?productId=1&orderAmount=20&payWay=3&orde
 
 
 BUG   //TODO  BUG 01  completeOrder逻辑 会加款重复
-        //TODO WHY +了@Transactional 就解决了数据重复提交问题
