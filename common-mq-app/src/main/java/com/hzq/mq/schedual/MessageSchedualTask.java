@@ -35,11 +35,10 @@ public class MessageSchedualTask implements InitializingBean {
     }
 
     private static class RunnableTask implements Runnable {
-
         private final Runnable runnable;
         private final int sleepSecond;
 
-        public RunnableTask(Runnable runnable, int sleepSecond) {
+        RunnableTask(Runnable runnable, int sleepSecond) {
             this.runnable = runnable;
             this.sleepSecond = sleepSecond;
         }
