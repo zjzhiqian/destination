@@ -33,7 +33,7 @@
     <dubbo:protocol port="${dubbo.protocol.port.order}"/>
 
 
-    <dubbo:service interface="com.hzq.order.service.OrderService" retries="0" ref="orderService" version="${dubbo.service.order.OrderService.version}"/>
+    <dubbo:service retries="0" interface="com.hzq.order.service.OrderService" ref="orderService" version="${dubbo.service.order.OrderService.version}"/>
 
     <dubbo:reference interface="com.hzq.user.service.MerchantInfoService" id="merchantInfoService" version="${dubbo.service.user.merchantInfoService.version}"/>
     <dubbo:reference interface="com.hzq.user.service.ProductService" id="productService" version="${dubbo.service.user.productService.version}"/>

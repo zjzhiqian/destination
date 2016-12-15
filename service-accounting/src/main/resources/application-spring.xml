@@ -33,7 +33,7 @@
     <dubbo:protocol port="${dubbo.protocol.port.accounting}"/>
 
 
-    <dubbo:service interface="com.hzq.accounting.service.AccountingService" ref="accountingService" version="${dubbo.service.account.AccountingService.version}"/>
+    <dubbo:service retries="0" interface="com.hzq.accounting.service.AccountingService" ref="accountingService" version="${dubbo.service.account.AccountingService.version}"/>
 
 
 </beans>

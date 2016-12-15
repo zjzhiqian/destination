@@ -5,6 +5,9 @@ import com.hzq.accounting.entity.Accounting;
 import com.hzq.accounting.service.AccountingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by hzq on 16/12/13.
@@ -16,7 +19,9 @@ public class AccountingServiceImpl implements AccountingService {
     AccountingMapper accountingMapper;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int generateAccounting(Accounting accounting) {
+        //TODO  这里insert会插入多条 数据库作唯一索引
         int result = 0;
         if (accountingMapper.getAccountingByVoucherNo(accounting.getVoucherNo()) == null) {
             result = accountingMapper.insert(accounting);

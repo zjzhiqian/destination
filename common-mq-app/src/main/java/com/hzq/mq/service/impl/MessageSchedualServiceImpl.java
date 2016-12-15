@@ -1,12 +1,17 @@
 package com.hzq.mq.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.hzq.accounting.entity.Accounting;
+import com.hzq.accounting.entity.AccountingMessage;
 import com.hzq.accounting.service.AccountingService;
 import com.hzq.message.entity.Message;
 import com.hzq.message.enums.MessageQueueName;
 import com.hzq.message.enums.MessageStatus;
 import com.hzq.message.service.MessageService;
+import com.hzq.mq.service.AccountMessageService;
+import com.hzq.mq.service.BankMessageService;
 import com.hzq.mq.service.MessageSchedualService;
+import com.hzq.order.entity.OrderNotify;
 import com.hzq.order.entity.OrderRecord;
 import com.hzq.order.enums.OrderStatusEnume;
 import com.hzq.order.service.OrderService;
@@ -31,10 +36,15 @@ public class MessageSchedualServiceImpl implements MessageSchedualService {
     @Autowired
     AccountingService accountingService;
 
+    @Autowired
+    BankMessageService bankMessageService;
+
+    private int commonMinute = 5;
+
 
     @Override
-    public void handleWaitingConfirmTimeOutOrderCompleteQueue() {
-        List<Message> messageList = messageService.getLimitMessageByParam(MessageQueueName.ACCOUNT_NOTIFY.name(), 1, MessageStatus.PRE_CONFIRM.getVal(), 100);
+    public void handleAccountingQueuePreSave() {
+        List<Message> messageList = messageService.getLimitMessageByParam(MessageQueueName.ACCOUNT_NOTIFY.name(), commonMinute, MessageStatus.PRE_CONFIRM.getVal(), 100);
         messageList.forEach(message -> {
             String bankOrderNo = message.getField1();
             OrderRecord orderRecord = orderService.getOrderRecordByBankNo(bankOrderNo);
@@ -49,8 +59,8 @@ public class MessageSchedualServiceImpl implements MessageSchedualService {
     }
 
     @Override
-    public void handleSendingTimeOutOrderCompleteQueue() {
-        List<Message> messageList = messageService.getLimitMessageByParam(MessageQueueName.ACCOUNT_NOTIFY.name(), 1, MessageStatus.TO_SEND.getVal(), 100);
+    public void handleAccountingQueueSend() {
+        List<Message> messageList = messageService.getLimitMessageByParam(MessageQueueName.ACCOUNT_NOTIFY.name(), commonMinute, MessageStatus.TO_SEND.getVal(), 100);
         messageList.forEach(message -> {
             String messageId = message.getMessageId();
             String bankOrderNo = message.getField1();
@@ -67,5 +77,15 @@ public class MessageSchedualServiceImpl implements MessageSchedualService {
                 }
             }
         });
+    }
+
+    @Override
+    public void handleOrderQueue() {
+        List<Message> messageList = messageService.getLimitMessageByParam(MessageQueueName.ORDER_NOTIFY.name(), commonMinute, MessageStatus.TO_SEND.getVal(), 100);
+        messageList.forEach(message -> {
+            OrderNotify notifyInfo = JSON.parseObject(message.getMessageBody(), OrderNotify.class);
+            bankMessageService.completePay(notifyInfo);
+        });
+
     }
 }

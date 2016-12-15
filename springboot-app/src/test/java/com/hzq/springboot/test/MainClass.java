@@ -30,7 +30,7 @@ public class MainClass {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         ExecutorService service = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 1; i++) {
             service.execute(new Task());
         }
     }
