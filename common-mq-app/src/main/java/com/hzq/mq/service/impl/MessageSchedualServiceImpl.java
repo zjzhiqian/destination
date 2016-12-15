@@ -34,7 +34,7 @@ public class MessageSchedualServiceImpl implements MessageSchedualService {
 
     @Override
     public void handleWaitingConfirmTimeOutOrderCompleteQueue() {
-        List<Message> messageList = messageService.getLimitMessageByParam(MessageQueueName.ACCOUNT_NOTIFY.name(), 5, MessageStatus.PRE_CONFIRM.getVal(), 100);
+        List<Message> messageList = messageService.getLimitMessageByParam(MessageQueueName.ACCOUNT_NOTIFY.name(), 1, MessageStatus.PRE_CONFIRM.getVal(), 100);
         messageList.forEach(message -> {
             String bankOrderNo = message.getField1();
             OrderRecord orderRecord = orderService.getOrderRecordByBankNo(bankOrderNo);
@@ -50,7 +50,7 @@ public class MessageSchedualServiceImpl implements MessageSchedualService {
 
     @Override
     public void handleSendingTimeOutOrderCompleteQueue() {
-        List<Message> messageList = messageService.getLimitMessageByParam(MessageQueueName.ACCOUNT_NOTIFY.name(), 5, MessageStatus.TO_SEND.getVal(), 100);
+        List<Message> messageList = messageService.getLimitMessageByParam(MessageQueueName.ACCOUNT_NOTIFY.name(), 1, MessageStatus.TO_SEND.getVal(), 100);
         messageList.forEach(message -> {
             String messageId = message.getMessageId();
             String bankOrderNo = message.getField1();

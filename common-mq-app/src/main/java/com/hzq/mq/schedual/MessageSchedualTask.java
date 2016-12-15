@@ -22,7 +22,6 @@ public class MessageSchedualTask implements InitializingBean {
 
     private static final ThreadPoolExecutor executors = new ThreadPoolExecutor(5, 20, 60, TimeUnit.SECONDS, new LinkedBlockingDeque<>());
 
-    private static final Logger logger = LoggerFactory.getLogger(MessageSchedualTask.class);
 
 
     private static final int SCHEDUAL_SLEEP_TIME = 5;
