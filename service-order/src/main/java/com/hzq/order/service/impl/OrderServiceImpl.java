@@ -156,8 +156,6 @@ public class OrderServiceImpl implements OrderService {
 
         BigDecimal amount = orderRecord.getOrderAmount().subtract(orderRecord.getPlatIncome());
         accountService.addAmountToMerchant(orderRecord.getMerchantId(), amount, orderRecord.getBankOrderNo(), orderRecord.getBankTrxNo());
-
-
     }
 
     /**

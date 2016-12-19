@@ -37,7 +37,7 @@ public class AccountServiceImpl implements AccountService {
         AccountHistory accountHistory = new AccountHistory();
         accountHistory.setMerchantId(merchantId);
         accountHistory.setAmount(amount);
-        accountHistory.setBalance(account.getBalance());//TODO 这样会有问题
+        accountHistory.setBalance(account.getBalance());//TODO 这样并发情况下会有问题
         accountHistory.setRequestNo(bankOrderNo);
         accountHistory.setBankTrxNo(bankTrxNo);
         accountHistory.setAccountNo(account.getAccountNo());

@@ -25,7 +25,7 @@ public class AccountingMessageListener implements SessionAwareMessageListener<Me
 
 
     @JmsListener(id = "accountingMessageListener", destination = "ACCOUNT_NOTIFY", concurrency = "5")
-    public void onMessage(Message message, Session session) {
+    public synchronized void onMessage(Message message, Session session) {
         try {
             ActiveMQTextMessage objectMessage = (ActiveMQTextMessage) message;
             String strMessage = objectMessage.getText();

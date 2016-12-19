@@ -35,6 +35,7 @@
 
     <dubbo:reference interface="com.hzq.order.service.OrderService" id="orderService" version="${dubbo.service.order.OrderService.version}"/>
     <dubbo:reference interface="com.hzq.message.service.MessageService" id="messageService" version="${dubbo.service.message.MessageService.version}"/>
+
     <dubbo:reference interface="com.hzq.accounting.service.AccountingService" id="accountingService" version="${dubbo.service.account.AccountingService.version}"/>
 
 </beans>
