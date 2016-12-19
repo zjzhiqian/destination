@@ -11,7 +11,6 @@ import org.springframework.context.annotation.ImportResource;
 @ImportResource("classpath:dubbo.xml")
 public class App {
     public static void main(String[] args) throws Exception {
-        System.out.println(1);
         SpringApplication.run(App.class, args);
     }
 }

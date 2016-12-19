@@ -39,7 +39,7 @@ public class MessageSchedualServiceImpl implements MessageSchedualService {
     @Autowired
     BankMessageService bankMessageService;
 
-    private int commonMinute = 5;
+    private int commonMinute = 1;
 
 
     @Override
