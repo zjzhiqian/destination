@@ -12,6 +12,7 @@ import com.hzq.order.entity.OrderParam;
 import com.hzq.order.entity.OrderRecord;
 import com.hzq.order.enums.OrderStatusEnume;
 import com.hzq.order.exception.OrderBizException;
+import com.hzq.order.redis.RedisHelper;
 import com.hzq.order.service.OrderService;
 import com.hzq.order.util.OrderUtil;
 import com.hzq.user.entity.MerchantInfo;
@@ -22,7 +23,6 @@ import org.mengyun.tcctransaction.Compensable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.AopContext;
-import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,7 +63,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public String initOrderPay(OrderParam orderParam) {
-
         Integer productId = orderParam.getProductId();
         String orderNo = orderParam.getOrderNo();
         BigDecimal orderAmount = orderParam.getOrderAmount();
@@ -100,8 +99,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void completePay(OrderNotify orderNotify) {
+        if (RedisHelper.isKeyExist("completePay" + orderNotify.getOutTradeNo(), 20))
+            throw new RuntimeException("订单支付处理中..");
+
         String returnMessage = JSON.toJSONString(orderNotify);
         logger.info("接收到支付结果{}", returnMessage);
         String bankOrderNo = orderNotify.getOutTradeNo();
@@ -123,7 +124,7 @@ public class OrderServiceImpl implements OrderService {
             Message message = OrderUtil.buildAccountingMessage(orderRecord);
             messageService.preSaveMessage(message);
             try {
-                ((OrderServiceImpl)AopContext.currentProxy()).orderPay(orderRecord, orderNotify);
+                ((OrderServiceImpl) AopContext.currentProxy()).orderPay(orderRecord, orderNotify);
             } catch (Exception e) {
                 e.printStackTrace();
                 throw e;
@@ -137,7 +138,7 @@ public class OrderServiceImpl implements OrderService {
 
 
     /**
-     * 收到银行支付成功消息
+     * 收到银行支付成功消息   如果一个订单,进入了两次 都先把状态更新为PAYING , 其中一条进行了后续操作,操作成功
      */
     @Compensable(confirmMethod = "confirmOrderPay", cancelMethod = "cancelOrderPay")
     @Transactional(rollbackFor = Exception.class)

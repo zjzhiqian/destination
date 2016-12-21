@@ -20,6 +20,7 @@
             <list>
                 <value>classpath:db.properties</value>
                 <value>classpath:dubbo-zk.properties</value>
+                <value>classpath:redis.properties</value>
             </list>
         </property>
     </bean>

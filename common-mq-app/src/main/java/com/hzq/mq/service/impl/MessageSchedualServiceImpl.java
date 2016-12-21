@@ -43,7 +43,7 @@ public class MessageSchedualServiceImpl implements MessageSchedualService {
 
     private static final Logger logger = LoggerFactory.getLogger(MessageSchedualServiceImpl.class);
 
-    private int commonMinute = 15;
+    private int commonMinute = 1;
 
 
     @Override
@@ -56,8 +56,8 @@ public class MessageSchedualServiceImpl implements MessageSchedualService {
             if (OrderStatusEnume.PAY_SUCCESS.getVal().equals(orderRecord.getStatus())) {
                 // 确认并发送消息
                 messageService.confirmAndSendMessage(message.getMessageId());
-            } else if (OrderStatusEnume.WAIT_PAY.getVal().equals(orderRecord.getStatus())) {
-                // 订单状态是等待支付，可以直接删除数据
+            } else if (OrderStatusEnume.WAIT_PAY.getVal().equals(orderRecord.getStatus())||OrderStatusEnume.PAY_FAIL.getVal().equals(orderRecord.getStatus())) {
+                // 订单状态是等待支付或者支付失败，可以直接删除数据
                 messageService.deleteMessageByMessageId(message.getMessageId());
             }
         });

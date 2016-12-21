@@ -49,6 +49,16 @@
             <version>${service.accounting.api.version}</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-redis -->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+            <version>1.7.4.RELEASE</version>
+        </dependency>
+
+
+
+
         <!--mq support-->
         <dependency>
             <groupId>org.apache.activemq</groupId>

@@ -35,7 +35,6 @@ public class AccountServiceImpl implements AccountService {
     @Transactional(rollbackFor = Exception.class)
     @Compensable(confirmMethod = "confirmAddAmountToMerchant", cancelMethod = "cancelAddAmountToMerchant")
     public void addAmountToMerchant(TransactionContext transactionContext, Integer merchantId, BigDecimal amount, String bankOrderNo, String bankTrxNo) {
-
         logger.info("addAmountToMerchant............");
         AccountHistory accountHistoryEntity = accountHistoryMapper.getAccountHistoryByRequestNo(bankOrderNo);
         if (accountHistoryEntity == null) {
@@ -54,20 +53,19 @@ public class AccountServiceImpl implements AccountService {
             accountHistoryEntity.setStatus(AccountHistoryStatusEnum.TRYING.getVal());
             accountHistoryMapper.update(accountHistoryEntity);
         }
-        throw new RuntimeException(""); //TODO 测试用,到时候删除
     }
+
 
     @Transactional(rollbackFor = Exception.class)
     public void confirmAddAmountToMerchant(TransactionContext transactionContext, Integer merchantId, BigDecimal amount, String bankOrderNo, String bankTrxNo) {
+        //TODO confirm cancel限制频率 防止多条同时进入 导致重复确认两次!
         logger.info("confirmAddAmountToMerchant............");
         AccountHistory accountHistory = accountHistoryMapper.getAccountHistoryByRequestNo(bankOrderNo);
-        //TODO 这里为null的话 需要抛出异常 而不是return
-        if (accountHistory == null || !AccountHistoryStatusEnum.TRYING.getVal().equals(accountHistory.getStatus()))
+        if (accountHistory == null) throw new RuntimeException("confirm出错!账户修改历史不存在");
+        if (!AccountHistoryStatusEnum.TRYING.getVal().equals(accountHistory.getStatus()))
             return;
         accountHistory.setStatus(AccountHistoryStatusEnum.CONFORM.getVal());
         accountHistoryMapper.update(accountHistory);
-
-        Account account = accountMapper.getAccountByMerchantId(merchantId);
         accountMapper.addAmountByMerchantId(merchantId, amount);
     }
 
@@ -79,6 +77,7 @@ public class AccountServiceImpl implements AccountService {
             return;
         accountHistory.setStatus(AccountHistoryStatusEnum.CANCEL.getVal());
         accountHistoryMapper.update(accountHistory);
+        accountMapper.addAmountByMerchantId(merchantId, amount.negate());
     }
 
 
