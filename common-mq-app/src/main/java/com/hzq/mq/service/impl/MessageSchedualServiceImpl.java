@@ -15,6 +15,8 @@ import com.hzq.order.entity.OrderNotify;
 import com.hzq.order.entity.OrderRecord;
 import com.hzq.order.enums.OrderStatusEnume;
 import com.hzq.order.service.OrderService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,12 +41,15 @@ public class MessageSchedualServiceImpl implements MessageSchedualService {
     @Autowired
     BankMessageService bankMessageService;
 
+    private static final Logger logger = LoggerFactory.getLogger(MessageSchedualServiceImpl.class);
+
     private int commonMinute = 1;
 
 
     @Override
     public void handleAccountingQueuePreSave() {
         List<Message> messageList = messageService.getLimitMessageByParam(MessageQueueName.ACCOUNT_NOTIFY.name(), commonMinute, MessageStatus.PRE_CONFIRM.getVal(), 100);
+        logger.warn("handleAccountingQueuePreSave,message Size {}",messageList.size());
         messageList.forEach(message -> {
             String bankOrderNo = message.getField1();
             OrderRecord orderRecord = orderService.getOrderRecordByBankNo(bankOrderNo);
@@ -52,7 +57,7 @@ public class MessageSchedualServiceImpl implements MessageSchedualService {
                 // 确认并发送消息
                 messageService.confirmAndSendMessage(message.getMessageId());
             } else if (OrderStatusEnume.WAIT_PAY.getVal().equals(orderRecord.getStatus())) {
-                // 订单状态是等到支付，可以直接删除数据
+                // 订单状态是等待支付，可以直接删除数据
                 messageService.deleteMessageByMessageId(message.getMessageId());
             }
         });
@@ -61,6 +66,7 @@ public class MessageSchedualServiceImpl implements MessageSchedualService {
     @Override
     public void handleAccountingQueueSend() {
         List<Message> messageList = messageService.getLimitMessageByParam(MessageQueueName.ACCOUNT_NOTIFY.name(), commonMinute, MessageStatus.TO_SEND.getVal(), 100);
+        logger.warn("handleAccountingQueueSend,message Size {}",messageList.size());
         messageList.forEach(message -> {
             String messageId = message.getMessageId();
             String bankOrderNo = message.getField1();
@@ -82,6 +88,7 @@ public class MessageSchedualServiceImpl implements MessageSchedualService {
     @Override
     public void handleOrderQueue() {
         List<Message> messageList = messageService.getLimitMessageByParam(MessageQueueName.ORDER_NOTIFY.name(), commonMinute, MessageStatus.TO_SEND.getVal(), 100);
+        logger.warn("handleOrderQueue,message Size {}",messageList.size());
         messageList.forEach(message -> {
             OrderNotify notifyInfo = JSON.parseObject(message.getMessageBody(), OrderNotify.class);
             bankMessageService.completePay(notifyInfo);

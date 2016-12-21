@@ -7,9 +7,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * Created by hzq on 16/12/13.
@@ -20,8 +18,7 @@ public class MessageSchedualTask implements InitializingBean {
     @Autowired
     MessageSchedualService messageSchedualService;
 
-    private static final ThreadPoolExecutor executors = new ThreadPoolExecutor(5, 20, 60, TimeUnit.SECONDS, new LinkedBlockingDeque<>());
-
+    ScheduledExecutorService executors = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors());
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -29,31 +26,9 @@ public class MessageSchedualTask implements InitializingBean {
         Runnable handleAccountingQueuePreSave = messageSchedualService::handleAccountingQueuePreSave;
         Runnable handleAccountingQueueSend = messageSchedualService::handleAccountingQueueSend;
         Runnable handleOrderQueue = messageSchedualService::handleOrderQueue;
-        executors.execute(new RunnableTask(handleAccountingQueuePreSave, 20));
-        executors.execute(new RunnableTask(handleAccountingQueueSend, 20));
-        executors.execute(new RunnableTask(handleOrderQueue, 20));
+
+        executors.scheduleAtFixedRate(handleAccountingQueuePreSave, 20, 20, TimeUnit.SECONDS);
+        executors.scheduleAtFixedRate(handleAccountingQueueSend, 20, 20, TimeUnit.SECONDS);
+        executors.scheduleAtFixedRate(handleOrderQueue, 20, 20, TimeUnit.SECONDS);
     }
-
-    private static class RunnableTask implements Runnable {
-        private final Runnable runnable;
-        private final int sleepSecond;
-
-        RunnableTask(Runnable runnable, int sleepSecond) {
-            this.runnable = runnable;
-            this.sleepSecond = sleepSecond;
-        }
-
-        @Override
-        public void run() {
-            while (true) {
-                runnable.run();
-                try {
-                    TimeUnit.SECONDS.sleep(sleepSecond);
-                } catch (InterruptedException ignored) {
-                }
-            }
-
-        }
-    }
-
 }

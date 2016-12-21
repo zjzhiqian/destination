@@ -7,11 +7,10 @@ package com.hzq.order.enums;
 public enum OrderStatusEnume {
 
     WAIT_PAY("待支付", 0),
-    PAY_SUCCESS("支付成功", 1),
-    PAY_FAIL("支付失败", 1),
-    CANCEL("取消", 1);
-
-
+    PAYING("正在支付", 1),
+    PAY_SUCCESS("支付成功", 2),
+    PAY_FAIL("支付失败", 3),
+    CANCEL("取消", 4);
 
     private String context;
     private Integer val;
