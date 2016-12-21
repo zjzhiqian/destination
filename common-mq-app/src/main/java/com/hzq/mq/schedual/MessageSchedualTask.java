@@ -23,12 +23,8 @@ public class MessageSchedualTask implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         // 开一个子线程处理 处理待确认,超时的(完成订单逻辑)的消息
-        Runnable handleAccountingQueuePreSave = messageSchedualService::handleAccountingQueuePreSave;
-        Runnable handleAccountingQueueSend = messageSchedualService::handleAccountingQueueSend;
-        Runnable handleOrderQueue = messageSchedualService::handleOrderQueue;
-
-        executors.scheduleAtFixedRate(handleAccountingQueuePreSave, 20, 20, TimeUnit.SECONDS);
-        executors.scheduleAtFixedRate(handleAccountingQueueSend, 20, 20, TimeUnit.SECONDS);
-        executors.scheduleAtFixedRate(handleOrderQueue, 20, 20, TimeUnit.SECONDS);
+        executors.scheduleAtFixedRate(messageSchedualService::handleAccountingQueuePreSave, 20, 20, TimeUnit.SECONDS);
+        executors.scheduleAtFixedRate(messageSchedualService::handleAccountingQueueSend, 20, 20, TimeUnit.SECONDS);
+        executors.scheduleAtFixedRate(messageSchedualService::handleOrderQueue, 20, 20, TimeUnit.SECONDS);
     }
 }
