@@ -33,8 +33,8 @@ public class MainClass {
         ExecutorService service2 = Executors.newFixedThreadPool(15);
         ExecutorService service3 = Executors.newFixedThreadPool(15);
         ExecutorService service4 = Executors.newFixedThreadPool(15);
-        for (int i = 0; i < 1000; i++) {
-            service.execute(new Task());
+        for (int i = 0; i < 1; i++) {
+//            service.execute(new Task());
             service2.execute(new Task());
 //            service3.execute(new Task());
 //            service4.execute(new Task());

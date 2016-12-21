@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 
-@ControllerAdvice
+//@ControllerAdvice
 public class ReturnValueConverterAdvice implements ResponseBodyAdvice {
 
 

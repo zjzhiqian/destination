@@ -25,8 +25,9 @@
     </bean>
 
     <import resource="classpath:application-db-account.xml"/>
+    <import resource="classpath:application-tcc.xml"/>
 
-    <aop:aspectj-autoproxy proxy-target-class="true"/>
+    <aop:aspectj-autoproxy proxy-target-class="true" expose-proxy="true"/>
 
 
     <dubbo:registry address="${dubbo.registry.address}"/>

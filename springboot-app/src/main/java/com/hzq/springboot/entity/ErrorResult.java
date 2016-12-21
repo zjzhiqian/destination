@@ -1,5 +1,6 @@
 package com.hzq.springboot.entity;
 
+
 /**
  * Created by hzq on 16/12/11.
  */

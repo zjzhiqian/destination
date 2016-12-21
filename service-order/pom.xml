@@ -79,6 +79,16 @@
             <artifactId>activemq-pool</artifactId>
         </dependency>
 
+        <!-- tcc-->
+        <dependency>
+            <groupId>org.mengyun</groupId>
+            <artifactId>tcc-transaction-spring</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+        </dependency>
+
         <!--dao support-->
         <dependency>
             <groupId>org.mybatis</groupId>

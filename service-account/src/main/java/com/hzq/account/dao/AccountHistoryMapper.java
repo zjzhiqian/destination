@@ -5,4 +5,5 @@ import com.hzq.base.dao.Dao;
 
 public interface AccountHistoryMapper extends Dao<AccountHistory,Integer> {
 
+    AccountHistory getAccountHistoryByRequestNo(String requestNo);
 }

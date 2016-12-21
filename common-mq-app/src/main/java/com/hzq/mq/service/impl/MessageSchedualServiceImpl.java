@@ -43,7 +43,7 @@ public class MessageSchedualServiceImpl implements MessageSchedualService {
 
     private static final Logger logger = LoggerFactory.getLogger(MessageSchedualServiceImpl.class);
 
-    private int commonMinute = 1;
+    private int commonMinute = 15;
 
 
     @Override

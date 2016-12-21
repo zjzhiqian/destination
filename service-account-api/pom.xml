@@ -18,6 +18,12 @@
             <artifactId>common-base</artifactId>
             <version>${common.base.version}</version>
         </dependency>
+
+        <!-- tcc-->
+        <dependency>
+            <groupId>org.mengyun</groupId>
+            <artifactId>tcc-transaction-spring</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

@@ -1,125 +1,130 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.hzq.account.dao.AccountHistoryMapper" >
+<mapper namespace="com.hzq.account.dao.AccountHistoryMapper">
 
 
-  <insert id="insert" parameterType="com.hzq.account.entity.AccountHistory" >
-    insert into account_history
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="remark != null" >
-        remark,
-      </if>
-      <if test="accountNo != null" >
-        account_no,
-      </if>
-      <if test="merchantId != null" >
-        merchant_id,
-      </if>
-      <if test="amount != null" >
-        amount,
-      </if>
-      <if test="balance != null" >
-        balance,
-      </if>
-      <if test="requestNo != null" >
-        request_no,
-      </if>
-      <if test="bankTrxNo != null" >
-        bank_trx_no,
-      </if>
-      <if test="trxType != null" >
-        trx_type,
-      </if>
-      <if test="createdAt != null" >
-        created_at,
-      </if>
-      <if test="updatedAt != null" >
-        updated_at,
-      </if>
-      <if test="status != null" >
-        status,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="remark != null" >
-        #{remark,jdbcType=VARCHAR},
-      </if>
-      <if test="accountNo != null" >
-        #{accountNo,jdbcType=VARCHAR},
-      </if>
-      <if test="merchantId != null" >
-        #{merchantId,jdbcType=INTEGER},
-      </if>
-      <if test="amount != null" >
-        #{amount,jdbcType=DECIMAL},
-      </if>
-      <if test="balance != null" >
-        #{balance,jdbcType=DECIMAL},
-      </if>
-      <if test="requestNo != null" >
-        #{requestNo,jdbcType=VARCHAR},
-      </if>
-      <if test="bankTrxNo != null" >
-        #{bankTrxNo,jdbcType=VARCHAR},
-      </if>
-      <if test="trxType != null" >
-        #{trxType,jdbcType=VARCHAR},
-      </if>
-      <if test="createdAt != null" >
-        #{createdAt,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updatedAt != null" >
-        #{updatedAt,jdbcType=TIMESTAMP},
-      </if>
-      <if test="status != null" >
-        #{status,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="update" parameterType="com.hzq.account.entity.AccountHistory" >
-    update account_history
-    <set >
-      <if test="remark != null" >
-        remark = #{remark,jdbcType=VARCHAR},
-      </if>
-      <if test="accountNo != null" >
-        account_no = #{accountNo,jdbcType=VARCHAR},
-      </if>
-      <if test="merchantId != null" >
-        merchant_id = #{merchantId,jdbcType=INTEGER},
-      </if>
-      <if test="amount != null" >
-        amount = #{amount,jdbcType=DECIMAL},
-      </if>
-      <if test="balance != null" >
-        balance = #{balance,jdbcType=DECIMAL},
-      </if>
-      <if test="requestNo != null" >
-        request_no = #{requestNo,jdbcType=VARCHAR},
-      </if>
-      <if test="bankTrxNo != null" >
-        bank_trx_no = #{bankTrxNo,jdbcType=VARCHAR},
-      </if>
-      <if test="trxType != null" >
-        trx_type = #{trxType,jdbcType=VARCHAR},
-      </if>
-      <if test="createdAt != null" >
-        created_at = #{createdAt,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updatedAt != null" >
-        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
-      </if>
-      <if test="status != null" >
-        status = #{status,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+    <insert id="insert" parameterType="com.hzq.account.entity.AccountHistory">
+        insert into account_history
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="accountNo != null">
+                account_no,
+            </if>
+            <if test="merchantId != null">
+                merchant_id,
+            </if>
+            <if test="amount != null">
+                amount,
+            </if>
+            <if test="balance != null">
+                balance,
+            </if>
+            <if test="requestNo != null">
+                request_no,
+            </if>
+            <if test="bankTrxNo != null">
+                bank_trx_no,
+            </if>
+            <if test="trxType != null">
+                trx_type,
+            </if>
+            <if test="createdAt != null">
+                created_at,
+            </if>
+            <if test="updatedAt != null">
+                updated_at,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="accountNo != null">
+                #{accountNo,jdbcType=VARCHAR},
+            </if>
+            <if test="merchantId != null">
+                #{merchantId,jdbcType=INTEGER},
+            </if>
+            <if test="amount != null">
+                #{amount,jdbcType=DECIMAL},
+            </if>
+            <if test="balance != null">
+                #{balance,jdbcType=DECIMAL},
+            </if>
+            <if test="requestNo != null">
+                #{requestNo,jdbcType=VARCHAR},
+            </if>
+            <if test="bankTrxNo != null">
+                #{bankTrxNo,jdbcType=VARCHAR},
+            </if>
+            <if test="trxType != null">
+                #{trxType,jdbcType=VARCHAR},
+            </if>
+            <if test="createdAt != null">
+                #{createdAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedAt != null">
+                #{updatedAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="update" parameterType="com.hzq.account.entity.AccountHistory">
+        update account_history
+        <set>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="accountNo != null">
+                account_no = #{accountNo,jdbcType=VARCHAR},
+            </if>
+            <if test="merchantId != null">
+                merchant_id = #{merchantId,jdbcType=INTEGER},
+            </if>
+            <if test="amount != null">
+                amount = #{amount,jdbcType=DECIMAL},
+            </if>
+            <if test="balance != null">
+                balance = #{balance,jdbcType=DECIMAL},
+            </if>
+            <if test="requestNo != null">
+                request_no = #{requestNo,jdbcType=VARCHAR},
+            </if>
+            <if test="bankTrxNo != null">
+                bank_trx_no = #{bankTrxNo,jdbcType=VARCHAR},
+            </if>
+            <if test="trxType != null">
+                trx_type = #{trxType,jdbcType=VARCHAR},
+            </if>
+            <if test="createdAt != null">
+                created_at = #{createdAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedAt != null">
+                updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="getAccountHistoryByRequestNo" resultType="com.hzq.account.entity.AccountHistory">
+select * from account_history where request_no = #{requestNo}
+
+    </select>
 
 </mapper>

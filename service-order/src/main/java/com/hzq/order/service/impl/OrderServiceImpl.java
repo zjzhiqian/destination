@@ -18,8 +18,11 @@ import com.hzq.user.entity.MerchantInfo;
 import com.hzq.user.entity.Product;
 import com.hzq.user.service.MerchantInfoService;
 import com.hzq.user.service.ProductService;
+import org.mengyun.tcctransaction.Compensable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.aop.framework.AopContext;
+import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +40,7 @@ import java.util.Optional;
 @Service("orderService")
 public class OrderServiceImpl implements OrderService {
 
+
     @Autowired
     ProductService productService;
     @Autowired
@@ -50,6 +54,7 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     AccountService accountService;
 
+
     private static final IdGenerator idGenerator = new SimpleIdGenerator();
 
     private static final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
@@ -58,15 +63,13 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public String initOrderPay(OrderParam orderParam) {
+
         Integer productId = orderParam.getProductId();
         String orderNo = orderParam.getOrderNo();
         BigDecimal orderAmount = orderParam.getOrderAmount();
-
         Product product = Optional.ofNullable(productService.getProductById(productId)).orElseThrow(() -> new OrderBizException("商品不存在"));
-
         Integer merchantId = product.getMerchantId();
         MerchantInfo merchantInfo = Optional.ofNullable(merchantInfoService.getMerchantInfoById(merchantId)).orElseThrow(() -> new OrderBizException("商户不存在"));
-
         //检查订单是否存在
         Order order = orderMapper.getOrderByOrderNo(orderNo);
         if (order == null) {
@@ -101,10 +104,8 @@ public class OrderServiceImpl implements OrderService {
     public void completePay(OrderNotify orderNotify) {
         String returnMessage = JSON.toJSONString(orderNotify);
         logger.info("接收到支付结果{}", returnMessage);
-
         String bankOrderNo = orderNotify.getOutTradeNo();
         OrderRecord orderRecord = orderRecordMapper.getOrderRecordByBankOrderNo(bankOrderNo);
-
         if (orderRecord == null) {
             logger.error("订单支付记录不存在");
             return;
@@ -116,14 +117,13 @@ public class OrderServiceImpl implements OrderService {
         boolean isSuccess = false;
         if ("success".equalsIgnoreCase(orderNotify.getResultCode()))
             isSuccess = true;
-
         orderRecord.setBankReturnMsg(returnMessage);
         if (isSuccess) {
             //返回结果成功
             Message message = OrderUtil.buildAccountingMessage(orderRecord);
             messageService.preSaveMessage(message);
             try {
-                completeSuccessOrder(orderRecord, orderNotify);
+                ((OrderServiceImpl)AopContext.currentProxy()).orderPay(orderRecord, orderNotify);
             } catch (Exception e) {
                 e.printStackTrace();
                 throw e;
@@ -135,35 +135,60 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+
+    /**
+     * 收到银行支付成功消息
+     */
+    @Compensable(confirmMethod = "confirmOrderPay", cancelMethod = "cancelOrderPay")
+    @Transactional(rollbackFor = Exception.class)
+    public void orderPay(OrderRecord orderRecord, OrderNotify orderNotify) {
+        logger.info("orderPay............");
+        orderRecord.setBankReturnMsg(JSON.toJSONString(orderNotify)); //银行返回消息
+        orderRecord.setCompleteTime(orderNotify.getTimeEnd()); //支付时间
+        orderRecord.setBankTrxNo(orderNotify.getTransactionId()); //银行流水号
+        orderRecord.setStatus(OrderStatusEnume.PAYING.getVal()); //修改状态正在支付
+        orderRecordMapper.update(orderRecord);
+        Order order = orderMapper.getOrderByOrderNo(orderRecord.getOrderNo());
+        order.setStatus(OrderStatusEnume.PAYING.getVal()); //修改状态正在支付
+        orderMapper.update(order);
+        BigDecimal amount = orderRecord.getOrderAmount().subtract(orderRecord.getPlatIncome());
+        accountService.addAmountToMerchant(null, orderRecord.getMerchantId(), amount, orderRecord.getBankOrderNo(), orderRecord.getBankTrxNo());
+    }
+
+
+    @Transactional
+    public void confirmOrderPay(OrderRecord orderRecord, OrderNotify orderNotify) {
+        logger.info("confirmOrderPay............");
+        if (!OrderStatusEnume.PAYING.getVal().equals(orderRecord.getStatus())) return;
+        orderRecord.setStatus(OrderStatusEnume.PAY_SUCCESS.getVal());
+        orderRecordMapper.update(orderRecord);
+        Order order = orderMapper.getOrderByOrderNo(orderRecord.getOrderNo());
+        order.setStatus(OrderStatusEnume.PAY_SUCCESS.getVal());
+        orderMapper.update(order);
+    }
+
+
+    @Transactional
+    public void cancelOrderPay(OrderRecord orderRecord, OrderNotify orderNotify) {
+        logger.info("cancelOrderPay............");
+        if (!OrderStatusEnume.PAYING.getVal().equals(orderRecord.getStatus())) return;
+        orderRecord.setStatus(OrderStatusEnume.PAY_FAIL.getVal());
+        orderRecordMapper.update(orderRecord);
+
+        Order order = orderMapper.getOrderByOrderNo(orderRecord.getOrderNo());
+        order.setStatus(OrderStatusEnume.PAY_FAIL.getVal());
+        orderMapper.update(order);
+
+    }
+
+
     @Override
     public OrderRecord getOrderRecordByBankNo(String bankOrderNo) {
         return orderRecordMapper.getOrderRecordByBankOrderNo(bankOrderNo);
     }
 
-    /**
-     * 收到银行支付成功消息
-     */
-    private void completeSuccessOrder(OrderRecord orderRecord, OrderNotify orderNotify) {
-        //TODO 这里应该做TCC事务
-        orderRecord.setBankReturnMsg(JSON.toJSONString(orderNotify)); //银行返回消息
-        orderRecord.setCompleteTime(orderNotify.getTimeEnd()); //支付时间
-        orderRecord.setBankTrxNo(orderNotify.getTransactionId()); //银行流水号
-        orderRecord.setStatus(OrderStatusEnume.PAY_SUCCESS.getVal()); //支付成功
-        orderRecordMapper.update(orderRecord);
-        Order order = orderMapper.getOrderByOrderNo(orderRecord.getOrderNo());
-        order.setStatus(OrderStatusEnume.PAY_SUCCESS.getVal()); //支付成功
-        orderMapper.update(order);
 
-        BigDecimal amount = orderRecord.getOrderAmount().subtract(orderRecord.getPlatIncome());
-        accountService.addAmountToMerchant(orderRecord.getMerchantId(), amount, orderRecord.getBankOrderNo(), orderRecord.getBankTrxNo());
-    }
-
-    /**
-     * 收到银行支付失败消息
-     *
-     * @param orderRecord
-     */
-    private void completeFailOrder(OrderRecord orderRecord) {
+    public void completeFailOrder(OrderRecord orderRecord) {
         orderRecord.setStatus(OrderStatusEnume.PAY_FAIL.getVal());
         orderRecordMapper.update(orderRecord);
 
@@ -171,6 +196,5 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(OrderStatusEnume.PAY_FAIL.getVal());
         orderMapper.update(order);
     }
-
 
 }

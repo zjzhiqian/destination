@@ -25,20 +25,25 @@
     </bean>
 
     <import resource="classpath:application-db-order.xml"/>
+    <import resource="classpath:application-tcc.xml"/>
 
-    <aop:aspectj-autoproxy proxy-target-class="true"/>
-
+    <aop:aspectj-autoproxy proxy-target-class="true" expose-proxy="true"/>
 
     <dubbo:registry address="${dubbo.registry.address}"/>
     <dubbo:protocol port="${dubbo.protocol.port.order}"/>
 
 
-    <dubbo:service retries="0" interface="com.hzq.order.service.OrderService" ref="orderService" version="${dubbo.service.order.OrderService.version}"/>
+    <dubbo:service retries="0" interface="com.hzq.order.service.OrderService" ref="orderService"
+                   version="${dubbo.service.order.OrderService.version}"/>
 
-    <dubbo:reference interface="com.hzq.user.service.MerchantInfoService" id="merchantInfoService" version="${dubbo.service.user.merchantInfoService.version}"/>
-    <dubbo:reference interface="com.hzq.user.service.ProductService" id="productService" version="${dubbo.service.user.productService.version}"/>
-    <dubbo:reference interface="com.hzq.message.service.MessageService" id="messageService" version="${dubbo.service.message.MessageService.version}">
-        <!--<dubbo:method name="confirmAndSendMessage" async="true" return="false"/>-->
+    <dubbo:reference interface="com.hzq.user.service.MerchantInfoService" id="merchantInfoService"
+                     version="${dubbo.service.user.merchantInfoService.version}"/>
+    <dubbo:reference interface="com.hzq.user.service.ProductService" id="productService"
+                     version="${dubbo.service.user.productService.version}"/>
+    <dubbo:reference interface="com.hzq.message.service.MessageService" id="messageService"
+                     version="${dubbo.service.message.MessageService.version}">
+        <dubbo:method name="confirmAndSendMessage" async="true" return="false"/>
     </dubbo:reference>
-    <dubbo:reference interface="com.hzq.account.service.AccountService" id="accountService" version="${dubbo.service.account.AccountService.version}"/>
+    <dubbo:reference interface="com.hzq.account.service.AccountService" id="accountService"
+                     version="${dubbo.service.account.AccountService.version}"/>
 </beans>

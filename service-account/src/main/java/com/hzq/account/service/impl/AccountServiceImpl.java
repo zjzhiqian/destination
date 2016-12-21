@@ -4,14 +4,17 @@ import com.hzq.account.dao.AccountHistoryMapper;
 import com.hzq.account.dao.AccountMapper;
 import com.hzq.account.entity.Account;
 import com.hzq.account.entity.AccountHistory;
+import com.hzq.account.enume.AccountHistoryStatusEnum;
 import com.hzq.account.service.AccountService;
-import com.hzq.base.util.DateUtils;
+import org.mengyun.tcctransaction.Compensable;
+import org.mengyun.tcctransaction.api.TransactionContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * 账户服务
@@ -25,25 +28,57 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     AccountHistoryMapper accountHistoryMapper;
 
+    private Logger logger = LoggerFactory.getLogger(AccountServiceImpl.class);
+
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Account addAmountToMerchant(Integer merchantId, BigDecimal amount, String bankOrderNo, String bankTrxNo) {
+    @Compensable(confirmMethod = "confirmAddAmountToMerchant", cancelMethod = "cancelAddAmountToMerchant")
+    public void addAmountToMerchant(TransactionContext transactionContext, Integer merchantId, BigDecimal amount, String bankOrderNo, String bankTrxNo) {
+
+        logger.info("addAmountToMerchant............");
+        AccountHistory accountHistoryEntity = accountHistoryMapper.getAccountHistoryByRequestNo(bankOrderNo);
+        if (accountHistoryEntity == null) {
+            Account account = accountMapper.getAccountByMerchantId(merchantId);
+            accountMapper.addAmountByMerchantId(merchantId, amount);
+            AccountHistory accountHistory = new AccountHistory();
+            accountHistory.setMerchantId(merchantId);
+            accountHistory.setAmount(amount);
+            accountHistory.setBalance(account.getBalance());
+            accountHistory.setRequestNo(bankOrderNo);
+            accountHistory.setBankTrxNo(bankTrxNo);
+            accountHistory.setAccountNo(account.getAccountNo());
+            accountHistory.setStatus(AccountHistoryStatusEnum.TRYING.getVal());
+            accountHistoryMapper.insert(accountHistory);
+        } else if (AccountHistoryStatusEnum.CANCEL.getVal().equals(accountHistoryEntity.getStatus())) {
+            accountHistoryEntity.setStatus(AccountHistoryStatusEnum.TRYING.getVal());
+            accountHistoryMapper.update(accountHistoryEntity);
+        }
+        throw new RuntimeException("");
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void confirmAddAmountToMerchant(TransactionContext transactionContext, Integer merchantId, BigDecimal amount, String bankOrderNo, String bankTrxNo) {
+        logger.info("confirmAddAmountToMerchant............");
+        AccountHistory accountHistory = accountHistoryMapper.getAccountHistoryByRequestNo(bankOrderNo);
+        if (accountHistory == null || !AccountHistoryStatusEnum.TRYING.getVal().equals(accountHistory.getStatus()))
+            return;
+        accountHistory.setStatus(AccountHistoryStatusEnum.CONFORM.getVal());
+        accountHistoryMapper.update(accountHistory);
 
         Account account = accountMapper.getAccountByMerchantId(merchantId);
-
         accountMapper.addAmountByMerchantId(merchantId, amount);
-        // 记录账户历史
-        AccountHistory accountHistory = new AccountHistory();
-        accountHistory.setMerchantId(merchantId);
-        accountHistory.setAmount(amount);
-        accountHistory.setBalance(account.getBalance());//TODO 这样并发情况下会有问题
-        accountHistory.setRequestNo(bankOrderNo);
-        accountHistory.setBankTrxNo(bankTrxNo);
-        accountHistory.setAccountNo(account.getAccountNo());
-        accountHistory.setStatus(1);
-        accountHistoryMapper.insert(accountHistory);
-        return account;
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void cancelAddAmountToMerchant(TransactionContext transactionContext, Integer merchantId, BigDecimal amount, String bankOrderNo, String bankTrxNo) {
+        logger.info("cancelAddAmountToMerchant............");
+        AccountHistory accountHistory = accountHistoryMapper.getAccountHistoryByRequestNo(bankOrderNo);
+        if (accountHistory == null || !AccountHistoryStatusEnum.TRYING.getVal().equals(accountHistory.getStatus()))
+            return;
+        accountHistory.setStatus(AccountHistoryStatusEnum.CANCEL.getVal());
+        accountHistoryMapper.update(accountHistory);
+    }
+
 
 }

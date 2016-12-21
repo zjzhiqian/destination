@@ -1,6 +1,7 @@
 package com.hzq.account.service;
 
 import com.hzq.account.entity.Account;
+import org.mengyun.tcctransaction.api.TransactionContext;
 
 import java.math.BigDecimal;
 
@@ -16,5 +17,5 @@ public interface AccountService {
      * @param bankTrxNo 银行流水号
      * @return 账户
      */
-    Account addAmountToMerchant(Integer merchantId, BigDecimal amount, String bankOrderNo, String bankTrxNo);
+    void addAmountToMerchant(TransactionContext transactionContext, Integer merchantId, BigDecimal amount, String bankOrderNo, String bankTrxNo);
 }

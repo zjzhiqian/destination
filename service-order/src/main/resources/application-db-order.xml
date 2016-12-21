@@ -26,6 +26,28 @@
         <property name="filters" value="stat"/>
     </bean>
 
+
+    <bean id="tccDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="url" value="${db.tcc.url}"/>
+        <property name="username" value="${db.tcc.username}"/>
+        <property name="password" value="${db.tcc.password}"/>
+        <property name="initialSize" value="${db.initialPoolSize}"/>
+        <property name="minIdle" value="${db.minPoolSize}"/>
+        <property name="maxActive" value="${db.maxPoolSize}"/>
+        <property name="maxWait" value="${db.maxWait}"/>
+        <property name="timeBetweenEvictionRunsMillis" value="${db.timeBetweenEvictionRunsMillis}"/>
+        <property name="minEvictableIdleTimeMillis" value="${db.minEvictableIdleTimeMillis}"/>
+        <property name="validationQuery" value="SELECT 'x'"/>
+        <property name="testWhileIdle" value="true"/>
+        <property name="testOnBorrow" value="false"/>
+        <property name="testOnReturn" value="false"/>
+        <property name="poolPreparedStatements" value="${db.poolPreparedStatements}"/>
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="20"/>
+        <!-- 配置监控统计拦截的filters -->
+        <property name="filters" value="stat"/>
+    </bean>
+
+
     <bean id="simpleSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <property name="mapperLocations" value="classpath*:com/hzq/**/*Mapper.xml"/>
@@ -46,4 +68,20 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
     <tx:annotation-driven transaction-manager="transactionManager"/>
+
+
+    <bean class="org.mengyun.tcctransaction.spring.recover.DefaultRecoverConfig">
+        <property name="maxRetryCount" value="30"/>
+        <property name="recoverDuration" value="120"/>
+        <property name="cronExpression" value="0 */1 * * * ?"/>
+    </bean>
+
+    <bean id="transactionRepository"
+          class="org.mengyun.tcctransaction.spring.repository.SpringJdbcTransactionRepository">
+        <property name="dataSource" ref="tccDataSource"/>
+        <property name="domain" value="ORDER"/>
+        <property name="tbSuffix" value="_ORDER"/>
+    </bean>
+
+
 </beans>
