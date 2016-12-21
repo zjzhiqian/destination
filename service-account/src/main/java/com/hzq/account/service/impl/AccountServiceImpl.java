@@ -54,13 +54,14 @@ public class AccountServiceImpl implements AccountService {
             accountHistoryEntity.setStatus(AccountHistoryStatusEnum.TRYING.getVal());
             accountHistoryMapper.update(accountHistoryEntity);
         }
-        throw new RuntimeException("");
+        throw new RuntimeException(""); //TODO 测试用,到时候删除
     }
 
     @Transactional(rollbackFor = Exception.class)
     public void confirmAddAmountToMerchant(TransactionContext transactionContext, Integer merchantId, BigDecimal amount, String bankOrderNo, String bankTrxNo) {
         logger.info("confirmAddAmountToMerchant............");
         AccountHistory accountHistory = accountHistoryMapper.getAccountHistoryByRequestNo(bankOrderNo);
+        //TODO 这里为null的话 需要抛出异常 而不是return
         if (accountHistory == null || !AccountHistoryStatusEnum.TRYING.getVal().equals(accountHistory.getStatus()))
             return;
         accountHistory.setStatus(AccountHistoryStatusEnum.CONFORM.getVal());
