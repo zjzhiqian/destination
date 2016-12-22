@@ -8,12 +8,11 @@ import com.hzq.message.entity.Message;
 import com.hzq.message.enums.MessageQueueName;
 import com.hzq.message.enums.MessageStatus;
 import com.hzq.message.service.MessageService;
+import com.hzq.mq.schedual.util.JobUtil;
 import com.hzq.order.entity.OrderRecord;
 import com.hzq.order.enums.OrderStatusEnume;
 import com.hzq.order.service.OrderService;
-import org.mengyun.tcctransaction.SystemException;
 import org.quartz.*;
-import org.quartz.impl.triggers.CronTriggerImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -55,21 +54,10 @@ public class HandleAccountingQueuePreSaveJob implements Job, InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        try {
-            JobDetail job = JobBuilder.newJob()
-                    .storeDurably(true)
-                    .withIdentity("HandleAccountingQueuePreSaveJob")
-                    .ofType(this.getClass())
-                    .build();
-            CronTriggerImpl trigger = new CronTriggerImpl();
-            trigger.setName("HandleAccountingQueuePreSaveJobCronTrigger");
-            trigger.setCronExpression(cronExpression);
-            scheduler.scheduleJob(job, trigger);
-            scheduler.start();
-        } catch (Exception e) {
-            throw new SystemException(e);
-        }
+        JobUtil.startJob("HandleAccountingQueuePreSaveJob","HandleAccountingQueuePreSaveJobCronTrigger",scheduler,cronExpression,this.getClass());
     }
+
+
 
 
     public void setCommonMinute(Integer commonMinute) {

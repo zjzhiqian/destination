@@ -1,8 +1,6 @@
 package com.hzq.order.util;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.hzq.accounting.entity.Accounting;
 import com.hzq.accounting.entity.AccountingMessage;
 import com.hzq.base.util.Creator;
 import com.hzq.base.util.UUIDUtils;
@@ -14,31 +12,18 @@ import com.hzq.order.entity.OrderRecord;
 import com.hzq.order.enums.OrderStatusEnume;
 import com.hzq.user.entity.MerchantInfo;
 import com.hzq.user.entity.Product;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.util.IdGenerator;
-import org.springframework.util.SimpleIdGenerator;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by hzq on 16/12/11.
  */
 public class OrderUtil {
 
-    private static final Logger logger = LoggerFactory.getLogger(OrderUtil.class);
-
-
-    private static final IdGenerator idGenerator = new SimpleIdGenerator();
-
     /**
      * 生成order实体
      */
     public static Order buildOrder(OrderParam orderParam, MerchantInfo merchantInfo, Product product) {
-        logger.info("封装order实体...");
-
         Order order = Creator.newInstance(orderParam, Order.class);
         order.setMerchantName(merchantInfo.getUserName());
         order.setMerchantId(merchantInfo.getId());
@@ -47,20 +32,11 @@ public class OrderUtil {
         order.setCreater("自动生成");
         order.setOrderFrom("自动生成");
         order.setRefererUrl("");
-//        private String cancelReason;
-//        private String trxType;
-//        private String fundIntoType;
-//        private Integer isRefund;
-//        private Integer refundTimes;
-//        private BigDecimal successRefundAmount;
-//        private String trxNo;
         return order;
     }
 
 
     public static OrderRecord buildOrderRecord(Order order) {
-        //TODO  测试:默认事务隔离级别(read write)下 对一个数据查询出来 进行+操作 然后update 有没有问题!
-        logger.info("封装orderRecord实体...");
         OrderRecord record = Creator.newInstance(order, OrderRecord.class);
         record.setId(null);
         record.setCreatedAt(null);
@@ -77,19 +53,6 @@ public class OrderUtil {
         record.setPlatCost(platCost);//平台成本
         record.setPlatIncome(platIncome);//平台收入
         record.setPlatProfit(platProfit);//平台利润
-
-//        private Date completeTime;
-//        private String bankTrxNo;
-//        private String payerUserNo;
-//        private String payerName;
-//        private BigDecimal payerPayAmount;
-//        private BigDecimal payerFee;
-//        private String payerAccountType;
-//        private String receiverUserNo;
-//        private String receiverName;
-//        private BigDecimal receiverPayAmount;
-//        private BigDecimal receiverFee;
-//        private String bankReturnMsg;
         return record;
     }
 

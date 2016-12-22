@@ -5,6 +5,7 @@ import com.hzq.message.entity.Message;
 import com.hzq.message.enums.MessageQueueName;
 import com.hzq.message.enums.MessageStatus;
 import com.hzq.message.service.MessageService;
+import com.hzq.mq.schedual.util.JobUtil;
 import com.hzq.mq.service.BankMessageService;
 import com.hzq.order.entity.OrderNotify;
 import org.mengyun.tcctransaction.SystemException;
@@ -49,20 +50,7 @@ public class HandleOrderQueueJob implements Job, InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        try {
-            JobDetail job = JobBuilder.newJob()
-                    .storeDurably(true)
-                    .withIdentity("HandleOrderQueueJob")
-                    .ofType(this.getClass())
-                    .build();
-            CronTriggerImpl trigger = new CronTriggerImpl();
-            trigger.setName("HandleOrderQueueJobCronTrigger");
-            trigger.setCronExpression(cronExpression);
-            scheduler.scheduleJob(job, trigger);
-            scheduler.start();
-        } catch (Exception e) {
-            throw new SystemException(e);
-        }
+        JobUtil.startJob("HandleOrderQueueJob", "HandleOrderQueueJobCronTrigger", scheduler, cronExpression,this.getClass());
     }
 
 

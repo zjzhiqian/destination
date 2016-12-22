@@ -16,6 +16,9 @@ import javax.jms.Session;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * 监听银行回调消息
+ */
 @Component
 public class BankMessageListener implements SessionAwareMessageListener<Message> {
 

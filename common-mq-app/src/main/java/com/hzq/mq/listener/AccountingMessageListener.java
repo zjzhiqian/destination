@@ -15,6 +15,9 @@ import javax.jms.Message;
 import javax.jms.Session;
 
 @Component
+/**
+ * 监听accounting会计消息
+ */
 public class AccountingMessageListener implements SessionAwareMessageListener<Message> {
 
     private static final Logger logger = LoggerFactory.getLogger(AccountingMessageListener.class);

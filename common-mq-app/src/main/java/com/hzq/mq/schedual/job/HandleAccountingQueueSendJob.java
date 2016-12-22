@@ -6,6 +6,7 @@ import com.hzq.message.entity.Message;
 import com.hzq.message.enums.MessageQueueName;
 import com.hzq.message.enums.MessageStatus;
 import com.hzq.message.service.MessageService;
+import com.hzq.mq.schedual.util.JobUtil;
 import org.mengyun.tcctransaction.SystemException;
 import org.quartz.*;
 import org.quartz.impl.triggers.CronTriggerImpl;
@@ -56,20 +57,7 @@ public class HandleAccountingQueueSendJob implements Job, InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        try {
-            JobDetail job = JobBuilder.newJob()
-                    .storeDurably(true)
-                    .withIdentity("HandleAccountingQueueSendJob")
-                    .ofType(this.getClass())
-                    .build();
-            CronTriggerImpl trigger = new CronTriggerImpl();
-            trigger.setName("HandleAccountingQueueSendJobCronTrigger");
-            trigger.setCronExpression(cronExpression);
-            scheduler.scheduleJob(job, trigger);
-            scheduler.start();
-        } catch (Exception e) {
-            throw new SystemException(e);
-        }
+        JobUtil.startJob("HandleAccountingQueueSendJob","HandleAccountingQueueSendJobCronTrigger",scheduler,cronExpression,this.getClass());
     }
 
 

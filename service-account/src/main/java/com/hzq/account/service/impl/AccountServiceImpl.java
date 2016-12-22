@@ -66,7 +66,6 @@ public class AccountServiceImpl implements AccountService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void confirmAddAmountToMerchant(TransactionContext transactionContext, Integer merchantId, BigDecimal amount, String bankOrderNo, String bankTrxNo) {
-        //TODO confirm cancel限制频率 防止多条同时进入 导致重复确认两次!
         System.err.println("confirmAddAmountToMerchant............");
         if (RedisHelper.isKeyExist("AccountServiceImpl:ConFirmOrCancelAddAmountToMerchant:" + bankOrderNo, 10))
             throw new RuntimeException("confirming账户过于频繁..");

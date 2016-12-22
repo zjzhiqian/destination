@@ -69,13 +69,11 @@ public class OrderServiceImpl implements OrderService {
         Product product = Optional.ofNullable(productService.getProductById(productId)).orElseThrow(() -> new OrderBizException("商品不存在"));
         Integer merchantId = product.getMerchantId();
         MerchantInfo merchantInfo = Optional.ofNullable(merchantInfoService.getMerchantInfoById(merchantId)).orElseThrow(() -> new OrderBizException("商户不存在"));
-        //检查订单是否存在
         Order order = orderMapper.getOrderByOrderNo(orderNo);
         if (order == null) {
             order = OrderUtil.buildOrder(orderParam, merchantInfo, product);
             orderMapper.insert(order);
         } else {
-            // 订单存在
             if (order.getOrderAmount().compareTo(orderAmount) != 0)
                 throw new OrderBizException("错误订单");
             if (OrderStatusEnume.PAY_SUCCESS.getVal().equals(order.getStatus()))
@@ -84,10 +82,8 @@ public class OrderServiceImpl implements OrderService {
         // 更新支付订单（因为支付方式可能会变换）
         order.setPayWay(orderParam.getPayWay());
         orderMapper.update(order);
-
         OrderRecord record = OrderUtil.buildOrderRecord(order);
         orderRecordMapper.insert(record);
-
         //发送http请求,返回returnMessage bankOrderNo与TrxNo(银行流水号)
         record.setBankOrderNo(order.getOrderNo()); //让银行订单号与商户订单号相同，方便做处理
         String uuid = idGenerator.generateId().toString();
@@ -120,7 +116,6 @@ public class OrderServiceImpl implements OrderService {
             isSuccess = true;
         orderRecord.setBankReturnMsg(returnMessage);
         if (isSuccess) {
-            //返回结果成功
             Message message = OrderUtil.buildAccountingMessage(orderRecord);
             messageService.preSaveMessage(message);
             try {
@@ -131,7 +126,6 @@ public class OrderServiceImpl implements OrderService {
             }
             messageService.confirmAndSendMessage(message.getMessageId());
         } else {
-            //返回结果失败
             completeFailOrder(orderRecord);
         }
     }
