@@ -127,4 +127,8 @@ select * from account_history where request_no = #{requestNo}
 
     </select>
 
+    <update id="changeStatusById">
+        update account_history set status = #{endVal} where id = #{id} and status = #{preVal}
+    </update>
+
 </mapper>

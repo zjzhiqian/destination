@@ -12,6 +12,7 @@
 
 
     <context:component-scan base-package="com.hzq.account"/>
+    <context:component-scan base-package="com.hzq.base.redis"/>
 
 
     <bean id="propertyConfigurer"
@@ -20,6 +21,7 @@
             <list>
                 <value>classpath:db.properties</value>
                 <value>classpath:dubbo-zk.properties</value>
+                <value>classpath:redis.properties</value>
             </list>
         </property>
     </bean>
@@ -34,7 +36,8 @@
     <dubbo:protocol port="${dubbo.protocol.port.account}"/>
 
 
-    <dubbo:service retries="0" interface="com.hzq.account.service.AccountService"  ref="accountService" version="${dubbo.service.account.AccountService.version}"/>
+    <dubbo:service retries="0" interface="com.hzq.account.service.AccountService" ref="accountService"
+                   version="${dubbo.service.account.AccountService.version}"/>
 
 
 </beans>

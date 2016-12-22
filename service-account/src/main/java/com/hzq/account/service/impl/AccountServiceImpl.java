@@ -6,6 +6,7 @@ import com.hzq.account.entity.Account;
 import com.hzq.account.entity.AccountHistory;
 import com.hzq.account.enume.AccountHistoryStatusEnum;
 import com.hzq.account.service.AccountService;
+import com.hzq.base.redis.RedisHelper;
 import org.mengyun.tcctransaction.Compensable;
 import org.mengyun.tcctransaction.api.TransactionContext;
 import org.slf4j.Logger;
@@ -38,7 +39,9 @@ public class AccountServiceImpl implements AccountService {
     @Transactional(rollbackFor = Exception.class)
     @Compensable(confirmMethod = "confirmAddAmountToMerchant", cancelMethod = "cancelAddAmountToMerchant")
     public void addAmountToMerchant(TransactionContext transactionContext, Integer merchantId, BigDecimal amount, String bankOrderNo, String bankTrxNo) {
-        logger.info("addAmountToMerchant............");
+        if (RedisHelper.isKeyExist("AccountServiceImpl:addAmountToMerchant:" + bankOrderNo, 10))
+            throw new RuntimeException("try生成账户历史过于频繁..");
+        System.err.println("addAmountToMerchant............");
         AccountHistory accountHistoryEntity = accountHistoryMapper.getAccountHistoryByRequestNo(bankOrderNo);
         if (accountHistoryEntity == null) {
             Account account = accountMapper.getAccountByMerchantId(merchantId);
@@ -64,15 +67,16 @@ public class AccountServiceImpl implements AccountService {
     @Transactional(rollbackFor = Exception.class)
     public void confirmAddAmountToMerchant(TransactionContext transactionContext, Integer merchantId, BigDecimal amount, String bankOrderNo, String bankTrxNo) {
         //TODO confirm cancel限制频率 防止多条同时进入 导致重复确认两次!
-        logger.info("confirmAddAmountToMerchant............");
+        System.err.println("confirmAddAmountToMerchant............");
+        if (RedisHelper.isKeyExist("AccountServiceImpl:ConFirmOrCancelAddAmountToMerchant:" + bankOrderNo, 10))
+            throw new RuntimeException("confirming账户过于频繁..");
         AccountHistory accountHistory = accountHistoryMapper.getAccountHistoryByRequestNo(bankOrderNo);
         if (accountHistory == null) throw new RuntimeException("confirm出错!账户修改历史不存在");
         if (!AccountHistoryStatusEnum.TRYING.getVal().equals(accountHistory.getStatus()))
             return;
         accountHistory.setStatus(AccountHistoryStatusEnum.CONFORM.getVal());
-        accountHistoryMapper.update(accountHistory);
-        accountMapper.addAmountByMerchantId(merchantId, amount);
-        if ("1".equals("1")) throw new RuntimeException("");
+        int rs = accountHistoryMapper.changeStatusById(accountHistory.getId(), AccountHistoryStatusEnum.TRYING.getVal(), AccountHistoryStatusEnum.CONFORM.getVal());
+        if (rs <= 0) throw new RuntimeException("更新账户状态失败!!!");
         accountMapper.addAmountByMerchantId(merchantId, amount);
     }
 
@@ -81,11 +85,14 @@ public class AccountServiceImpl implements AccountService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void cancelAddAmountToMerchant(TransactionContext transactionContext, Integer merchantId, BigDecimal amount, String bankOrderNo, String bankTrxNo) {
-        logger.info("cancelAddAmountToMerchant............");
+        System.err.println("cancelAddAmountToMerchant............");
+        if (RedisHelper.isKeyExist("AccountServiceImpl:ConFirmOrCancelAddAmountToMerchant:" + bankOrderNo, 10))
+            throw new RuntimeException("canceling账户过于频繁..");
         AccountHistory accountHistory = accountHistoryMapper.getAccountHistoryByRequestNo(bankOrderNo);
         if (accountHistory == null || !AccountHistoryStatusEnum.TRYING.getVal().equals(accountHistory.getStatus()))
             return;
-        accountHistory.setStatus(AccountHistoryStatusEnum.CANCEL.getVal());
+        int rs = accountHistoryMapper.changeStatusById(accountHistory.getId(), AccountHistoryStatusEnum.TRYING.getVal(), AccountHistoryStatusEnum.CANCEL.getVal());
+        if (rs <= 0) throw new RuntimeException("更新账户状态失败!!!");
         accountHistoryMapper.update(accountHistory);
     }
 

@@ -12,7 +12,7 @@ import com.hzq.order.entity.OrderParam;
 import com.hzq.order.entity.OrderRecord;
 import com.hzq.order.enums.OrderStatusEnume;
 import com.hzq.order.exception.OrderBizException;
-import com.hzq.order.redis.RedisHelper;
+import com.hzq.base.redis.RedisHelper;
 import com.hzq.order.service.OrderService;
 import com.hzq.order.util.OrderUtil;
 import com.hzq.user.entity.MerchantInfo;
@@ -100,7 +100,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void completePay(OrderNotify orderNotify) {
-        if (RedisHelper.isKeyExist("completePay" + orderNotify.getOutTradeNo(), 20))
+        if (RedisHelper.isKeyExist("OrderServiceImpl:completePay" + orderNotify.getOutTradeNo(), 20))
             throw new RuntimeException("订单支付处理中..");
 
         String returnMessage = JSON.toJSONString(orderNotify);
@@ -138,12 +138,13 @@ public class OrderServiceImpl implements OrderService {
 
 
     /**
+     * //TODO BUG 订单支付失败了,却确认了流水
      * 收到银行支付成功消息   如果一个订单,进入了两次 都先把状态更新为PAYING , 其中一条进行了后续操作,操作成功
      */
     @Compensable(confirmMethod = "confirmOrderPay", cancelMethod = "cancelOrderPay")
     @Transactional(rollbackFor = Exception.class)
     public void orderPay(OrderRecord orderRecord, OrderNotify orderNotify) {
-        logger.info("orderPay............");
+        System.err.println("orderPay............");
         orderRecord.setBankReturnMsg(JSON.toJSONString(orderNotify)); //银行返回消息
         orderRecord.setCompleteTime(orderNotify.getTimeEnd()); //支付时间
         orderRecord.setBankTrxNo(orderNotify.getTransactionId()); //银行流水号
@@ -159,7 +160,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     public void confirmOrderPay(OrderRecord orderRecord, OrderNotify orderNotify) {
-        logger.info("confirmOrderPay............");
+        if (RedisHelper.isKeyExist("OrderServiceImpl:confirmOrCancelOrderPay" + orderNotify.getOutTradeNo(), 20))
+            throw new RuntimeException("订单confirming..");
+        System.err.println("confirmOrderPay............");
         if (!OrderStatusEnume.PAYING.getVal().equals(orderRecord.getStatus())) return;
         orderRecord.setStatus(OrderStatusEnume.PAY_SUCCESS.getVal());
         orderRecordMapper.update(orderRecord);
@@ -171,7 +174,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     public void cancelOrderPay(OrderRecord orderRecord, OrderNotify orderNotify) {
-        logger.info("cancelOrderPay............");
+        if (RedisHelper.isKeyExist("OrderServiceImpl:confirmOrCancelOrderPay" + orderNotify.getOutTradeNo(), 20))
+            throw new RuntimeException("订单canceling..");
+        System.err.println("cancelOrderPay............");
         if (!OrderStatusEnume.PAYING.getVal().equals(orderRecord.getStatus())) return;
         orderRecord.setStatus(OrderStatusEnume.PAY_FAIL.getVal());
         orderRecordMapper.update(orderRecord);

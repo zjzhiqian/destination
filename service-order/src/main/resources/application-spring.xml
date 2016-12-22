@@ -12,6 +12,7 @@
 
 
     <context:component-scan base-package="com.hzq.order"/>
+    <context:component-scan base-package="com.hzq.base.redis"/>
 
 
     <bean id="propertyConfigurer"
