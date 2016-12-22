@@ -22,11 +22,11 @@ public class JobUtil {
         try {
             JobDetail job = JobBuilder.newJob()
                     .storeDurably(true)
-                    .withIdentity("HandleAccountingQueuePreSaveJob")
+                    .withIdentity(jobName)
                     .ofType(jobClass)
                     .build();
             CronTriggerImpl trigger = new CronTriggerImpl();
-            trigger.setName("HandleAccountingQueuePreSaveJobCronTrigger");
+            trigger.setName(triggerName);
             trigger.setCronExpression(cronExpression);
             scheduler.scheduleJob(job, trigger);
             scheduler.start();

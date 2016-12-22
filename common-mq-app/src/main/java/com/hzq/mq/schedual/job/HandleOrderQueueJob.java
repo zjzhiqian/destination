@@ -8,13 +8,10 @@ import com.hzq.message.service.MessageService;
 import com.hzq.mq.schedual.util.JobUtil;
 import com.hzq.mq.service.BankMessageService;
 import com.hzq.order.entity.OrderNotify;
-import org.mengyun.tcctransaction.SystemException;
 import org.quartz.*;
-import org.quartz.impl.triggers.CronTriggerImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -39,7 +36,7 @@ public class HandleOrderQueueJob implements Job, InitializingBean {
     public void execute(JobExecutionContext context) throws JobExecutionException {
 
         List<Message> messageList = messageService.getLimitMessageByParam(MessageQueueName.ORDER_NOTIFY.name(), commonMinute, MessageStatus.TO_SEND.getVal(), 100);
-        logger.warn("handleOrderQueue,message Size {}", messageList.size());
+        logger.debug("handleOrderQueue,message Size {}", messageList.size());
         messageList.forEach(message -> {
             OrderNotify notifyInfo = JSON.parseObject(message.getMessageBody(), OrderNotify.class);
             bankMessageService.completePay(notifyInfo);

@@ -3,7 +3,6 @@ package com.hzq.mq.schedual.job;
 /**
  * Created by hzq on 16/12/22.
  */
-
 import com.hzq.message.entity.Message;
 import com.hzq.message.enums.MessageQueueName;
 import com.hzq.message.enums.MessageStatus;
@@ -37,7 +36,7 @@ public class HandleAccountingQueuePreSaveJob implements Job, InitializingBean {
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         List<Message> messageList = messageService.getLimitMessageByParam(MessageQueueName.ACCOUNT_NOTIFY.name(), commonMinute, MessageStatus.PRE_CONFIRM.getVal(), 100);
-        logger.warn("handleAccountingQueuePreSave,message Size {}", messageList.size());
+        logger.debug("handleAccountingQueuePreSave,message Size {}", messageList.size());
         messageList.forEach(message -> {
             String bankOrderNo = message.getField1();
             OrderRecord orderRecord = orderService.getOrderRecordByBankNo(bankOrderNo);
