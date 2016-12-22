@@ -33,9 +33,39 @@
     <dubbo:registry address="${dubbo.registry.address}"/>
     <dubbo:protocol port="${dubbo.protocol.port.mq}"/>
 
-    <dubbo:reference interface="com.hzq.order.service.OrderService" id="orderService" version="${dubbo.service.order.OrderService.version}"/>
-    <dubbo:reference interface="com.hzq.message.service.MessageService" id="messageService" version="${dubbo.service.message.MessageService.version}"/>
+    <dubbo:reference interface="com.hzq.order.service.OrderService" id="orderService"
+                     version="${dubbo.service.order.OrderService.version}"/>
+    <dubbo:reference interface="com.hzq.message.service.MessageService" id="messageService"
+                     version="${dubbo.service.message.MessageService.version}"/>
 
-    <dubbo:reference interface="com.hzq.accounting.service.AccountingService" id="accountingService" version="${dubbo.service.account.AccountingService.version}"/>
+    <dubbo:reference interface="com.hzq.accounting.service.AccountingService" id="accountingService"
+                     version="${dubbo.service.account.AccountingService.version}"/>
+
+
+    <bean id="recoverScheduler" scope="prototype" class="org.springframework.scheduling.quartz.SchedulerFactoryBean"/>
+
+    <bean id="handleAccountingQueuePreSaveJob" class="com.hzq.mq.schedual.job.HandleAccountingQueuePreSaveJob">
+        <property name="commonMinute" value="1"/>
+        <property name="cronExpression" value="0/20 * * * * ?"/>
+        <property name="scheduler" ref="recoverScheduler"/>
+        <property name="messageService" ref="messageService"/>
+        <property name="orderService" ref="orderService"/>
+    </bean>
+
+    <bean id="handleAccountingQueueSendJob" class="com.hzq.mq.schedual.job.HandleAccountingQueueSendJob">
+        <property name="commonMinute" value="1"/>
+        <property name="cronExpression" value="0/20 * * * * ?"/>
+        <property name="scheduler" ref="recoverScheduler"/>
+        <property name="messageService" ref="messageService"/>
+        <property name="accountingService" ref="accountingService"/>
+    </bean>
+
+    <bean id="handleOrderQueueJob" class="com.hzq.mq.schedual.job.HandleOrderQueueJob">
+        <property name="commonMinute" value="1"/>
+        <property name="cronExpression" value="0/20 * * * * ?"/>
+        <property name="scheduler" ref="recoverScheduler"/>
+        <property name="messageService" ref="messageService"/>
+        <property name="bankMessageService" ref="bankMessageService"/>
+    </bean>
 
 </beans>

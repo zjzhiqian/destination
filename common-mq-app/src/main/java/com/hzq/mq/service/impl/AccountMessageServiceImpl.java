@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 /**
  * Created by hzq on 16/12/13.
  */
-@Service
+@Service("accountMessageService")
 public class AccountMessageServiceImpl implements AccountMessageService {
 
     @Autowired

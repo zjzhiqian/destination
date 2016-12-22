@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 /**
  * Created by hzq on 16/12/13.
  */
-@Service
+@Service("bankMessageService")
 public class BankMessageServiceImpl implements BankMessageService {
 
     private static final Logger logger = LoggerFactory.getLogger(BankMessageServiceImpl.class);

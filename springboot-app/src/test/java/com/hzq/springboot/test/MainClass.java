@@ -29,15 +29,15 @@ public class MainClass {
 
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        ExecutorService service = Executors.newFixedThreadPool(15);
-        ExecutorService service2 = Executors.newFixedThreadPool(15);
-//        ExecutorService service3 = Executors.newFixedThreadPool(15);
-//        ExecutorService service4 = Executors.newFixedThreadPool(15);
-        for (int i = 0; i < 500; i++) {
+        ExecutorService service = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        ExecutorService service2 = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        ExecutorService service3 = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        ExecutorService service4 = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        for (int i = 0; i < 1250; i++) {
             service.execute(new Task());
             service2.execute(new Task());
-//            service3.execute(new Task());
-//            service4.execute(new Task());
+            service3.execute(new Task());
+            service4.execute(new Task());
         }
     }
 

@@ -31,6 +31,9 @@ public class AccountServiceImpl implements AccountService {
     private Logger logger = LoggerFactory.getLogger(AccountServiceImpl.class);
 
 
+    /**
+     * try阶段,只生成了账户历史
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     @Compensable(confirmMethod = "confirmAddAmountToMerchant", cancelMethod = "cancelAddAmountToMerchant")
@@ -39,7 +42,6 @@ public class AccountServiceImpl implements AccountService {
         AccountHistory accountHistoryEntity = accountHistoryMapper.getAccountHistoryByRequestNo(bankOrderNo);
         if (accountHistoryEntity == null) {
             Account account = accountMapper.getAccountByMerchantId(merchantId);
-            accountMapper.addAmountByMerchantId(merchantId, amount);
             AccountHistory accountHistory = new AccountHistory();
             accountHistory.setMerchantId(merchantId);
             accountHistory.setAmount(amount);
@@ -56,6 +58,9 @@ public class AccountServiceImpl implements AccountService {
     }
 
 
+    /**
+     * confirm阶段,+款并且修改账户历史的状态
+     */
     @Transactional(rollbackFor = Exception.class)
     public void confirmAddAmountToMerchant(TransactionContext transactionContext, Integer merchantId, BigDecimal amount, String bankOrderNo, String bankTrxNo) {
         //TODO confirm cancel限制频率 防止多条同时进入 导致重复确认两次!
@@ -67,8 +72,13 @@ public class AccountServiceImpl implements AccountService {
         accountHistory.setStatus(AccountHistoryStatusEnum.CONFORM.getVal());
         accountHistoryMapper.update(accountHistory);
         accountMapper.addAmountByMerchantId(merchantId, amount);
+        if ("1".equals("1")) throw new RuntimeException("");
+        accountMapper.addAmountByMerchantId(merchantId, amount);
     }
 
+    /**
+     * cancel阶段,将账户历史状态修改为cancel
+     */
     @Transactional(rollbackFor = Exception.class)
     public void cancelAddAmountToMerchant(TransactionContext transactionContext, Integer merchantId, BigDecimal amount, String bankOrderNo, String bankTrxNo) {
         logger.info("cancelAddAmountToMerchant............");
@@ -77,7 +87,6 @@ public class AccountServiceImpl implements AccountService {
             return;
         accountHistory.setStatus(AccountHistoryStatusEnum.CANCEL.getVal());
         accountHistoryMapper.update(accountHistory);
-        accountMapper.addAmountByMerchantId(merchantId, amount.negate());
     }
 
 
