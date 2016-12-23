@@ -14,6 +14,14 @@
 
     <dependencies>
 
+
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+        </dependency>
+
+
         <dependency>
             <groupId>com.hzq</groupId>
             <artifactId>service-account-api</artifactId>
@@ -48,7 +56,6 @@
             <artifactId>service-accounting-api</artifactId>
             <version>${service.accounting.api.version}</version>
         </dependency>
-
 
 
         <!--mq support-->
@@ -154,10 +161,6 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>

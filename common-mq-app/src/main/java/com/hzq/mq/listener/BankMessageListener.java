@@ -35,7 +35,7 @@ public class BankMessageListener implements SessionAwareMessageListener<Message>
             ActiveMQTextMessage objectMessage = (ActiveMQTextMessage) message;
             String strMessage = objectMessage.getText();
             OrderNotify notifyInfo = JSON.parseObject(strMessage, OrderNotify.class);
-            fixedThreadPool.execute(() -> bankMessageService.completePay(notifyInfo));
+            fixedThreadPool.execute(() -> bankMessageService.completePay(notifyInfo));   //TODO 这里线程池抛出异常的默认处理策略是什么呢?
         } catch (Exception e) {
             logger.error("BankMessageListener receive message error", e);
         }

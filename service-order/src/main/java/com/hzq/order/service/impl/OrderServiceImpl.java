@@ -98,9 +98,7 @@ public class OrderServiceImpl implements OrderService {
     public void completePay(OrderNotify orderNotify) {
         if (RedisHelper.isKeyExist("OrderServiceImpl:completePay" + orderNotify.getOutTradeNo(), 20))
             throw new RuntimeException("订单支付处理中..");
-
         String returnMessage = JSON.toJSONString(orderNotify);
-        logger.info("接收到支付结果{}", returnMessage);
         String bankOrderNo = orderNotify.getOutTradeNo();
         OrderRecord orderRecord = orderRecordMapper.getOrderRecordByBankOrderNo(bankOrderNo);
         if (orderRecord == null) {
@@ -132,13 +130,12 @@ public class OrderServiceImpl implements OrderService {
 
 
     /**
-     * //TODO BUG 订单支付失败了,却确认了流水
-     * 收到银行支付成功消息   如果一个订单,进入了两次 都先把状态更新为PAYING , 其中一条进行了后续操作,操作成功
+     * 收到银行支付成功消息
      */
     @Compensable(confirmMethod = "confirmOrderPay", cancelMethod = "cancelOrderPay")
     @Transactional(rollbackFor = Exception.class)
     public void orderPay(OrderRecord orderRecord, OrderNotify orderNotify) {
-        System.err.println("orderPay............");
+        logger.warn("tryOrderPay开始执行,订单号{},时间{}", orderRecord.getBankOrderNo(), new SimpleDateFormat("HH:mm:ss:SSS").format(new Date()));
         orderRecord.setBankReturnMsg(JSON.toJSONString(orderNotify)); //银行返回消息
         orderRecord.setCompleteTime(orderNotify.getTimeEnd()); //支付时间
         orderRecord.setBankTrxNo(orderNotify.getTransactionId()); //银行流水号
@@ -147,37 +144,50 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderMapper.getOrderByOrderNo(orderRecord.getOrderNo());
         order.setStatus(OrderStatusEnume.PAYING.getVal()); //修改状态正在支付
         orderMapper.update(order);
+        logger.warn("tryOrderPay方法,更新订单状态为PAYING,订单号{},时间{}", orderRecord.getBankOrderNo(), new SimpleDateFormat("HH:mm:ss:SSS").format(new Date()));
         BigDecimal amount = orderRecord.getOrderAmount().subtract(orderRecord.getPlatIncome());
         accountService.addAmountToMerchant(null, orderRecord.getMerchantId(), amount, orderRecord.getBankOrderNo(), orderRecord.getBankTrxNo());
+        logger.warn("tryOrderPay方法,给账户加款,结束执行,订单号{},时间{}", orderRecord.getBankOrderNo(), new SimpleDateFormat("HH:mm:ss:SSS").format(new Date()));
     }
 
 
     @Transactional
     public void confirmOrderPay(OrderRecord orderRecord, OrderNotify orderNotify) {
-        if (RedisHelper.isKeyExist("OrderServiceImpl:confirmOrCancelOrderPay" + orderNotify.getOutTradeNo(), 20))
+        if (RedisHelper.isKeyExist("OrderServiceImpl:confirmOrCancelOrderPay" + orderNotify.getOutTradeNo(), 10))
             throw new RuntimeException("订单confirming..");
-        System.err.println("confirmOrderPay............");
-        if (!OrderStatusEnume.PAYING.getVal().equals(orderRecord.getStatus())) return;
+        logger.warn("confirmOrderPay开始执行,订单号{},时间{}", orderRecord.getBankOrderNo(), new SimpleDateFormat("HH:mm:ss:SSS").format(new Date()));
+        OrderRecord dbOrderRecord = orderRecordMapper.getOrderRecordByBankOrderNo(orderNotify.getOutTradeNo());
+        logger.warn("cancelOrderPay开始执行,,DB订单状态:{},订单号{},时间{}", dbOrderRecord.getStatus(), orderRecord.getBankOrderNo(), new SimpleDateFormat("HH:mm:ss:SSS").format(new Date()));
+        //try操作成功,进入了confirm,confirm由于某种原因出错,恢复调度任务进入这里  (而另一个message重发过来的消息,try失败,进行了cancel操作)
+        //此时这个参数还是PAYING的,而DB已经更新为cancel
+//        if (!OrderStatusEnume.PAYING.getVal().equals(orderRecord.getStatus())) return;
+        if (!OrderStatusEnume.PAYING.getVal().equals(dbOrderRecord.getStatus())) return;
         orderRecord.setStatus(OrderStatusEnume.PAY_SUCCESS.getVal());
         orderRecordMapper.update(orderRecord);
         Order order = orderMapper.getOrderByOrderNo(orderRecord.getOrderNo());
         order.setStatus(OrderStatusEnume.PAY_SUCCESS.getVal());
         orderMapper.update(order);
+        logger.warn("confirmOrderPay执行结束,,订单号{},时间{},", orderRecord.getBankOrderNo(), new SimpleDateFormat("HH:mm:ss:SSS").format(new Date()));
     }
 
 
     @Transactional
     public void cancelOrderPay(OrderRecord orderRecord, OrderNotify orderNotify) {
-        if (RedisHelper.isKeyExist("OrderServiceImpl:confirmOrCancelOrderPay" + orderNotify.getOutTradeNo(), 20))
+        if (RedisHelper.isKeyExist("OrderServiceImpl:confirmOrCancelOrderPay" + orderNotify.getOutTradeNo(), 10))
             throw new RuntimeException("订单canceling..");
-        System.err.println("cancelOrderPay............");
-        if (!OrderStatusEnume.PAYING.getVal().equals(orderRecord.getStatus())) return;
+        logger.warn("cancelOrderPay开始执行,订单状态{},订单号{},时间{}", orderRecord.getStatus(), orderRecord.getBankOrderNo(), new SimpleDateFormat("HH:mm:ss:SSS").format(new Date()));
+        OrderRecord dbOrderRecord = orderRecordMapper.getOrderRecordByBankOrderNo(orderNotify.getOutTradeNo());
+        logger.warn("cancelOrderPay开始执行,,DB订单状态:{},订单号{},时间{}", dbOrderRecord.getStatus(), orderRecord.getBankOrderNo(), new SimpleDateFormat("HH:mm:ss:SSS").format(new Date()));
+        //BUG CARE 从orderRecord参数的status 会跟 DB拿出来的status 状态可能会不一致
+        //(比如 try操作失败,(由于各种宕机等原因)由定时任务进入了这里的cancel  而message重发机制 另一个操作try confirm流程都成功, 这里会把confirm状态的更新为failed)
+//        if (!OrderStatusEnume.PAYING.getVal().equals(orderRecord.getStatus())) return;
+        if (!OrderStatusEnume.PAYING.getVal().equals(dbOrderRecord.getStatus())) return;
         orderRecord.setStatus(OrderStatusEnume.PAY_FAIL.getVal());
         orderRecordMapper.update(orderRecord);
-
         Order order = orderMapper.getOrderByOrderNo(orderRecord.getOrderNo());
         order.setStatus(OrderStatusEnume.PAY_FAIL.getVal());
         orderMapper.update(order);
+        logger.warn("cancelOrderPay结束执行,订单号{},时间{}", orderRecord.getBankOrderNo(), new SimpleDateFormat("HH:mm:ss:SSS").format(new Date()));
 
     }
 
